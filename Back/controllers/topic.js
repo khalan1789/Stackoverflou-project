@@ -10,7 +10,7 @@ exports.createOneTopic = (req, res) => {
     });
     topic
         .save()
-        .then(res.status(201).json({ message: "article publié avec succès !" }))
+        .then(res.status(201).json({ message: "topic publish with success !" }))
         .catch((error) => res.status(400).json({ error }));
 };
 
@@ -35,7 +35,9 @@ exports.updateOneTopic = (req, res) => {
         { ...req.body, description: req.body.description }
     )
         .then((topic) =>
-            res.status(200).json({ message: "modification success !", topic })
+            res
+                .status(200)
+                .json({ message: "topic updated with success !", topic })
         )
         .catch((error) => res.status(400).json({ error }));
 };

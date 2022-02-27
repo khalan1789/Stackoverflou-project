@@ -25,9 +25,7 @@ exports.createMessage = (req, res, next) => {
     message
         .save()
         .then(
-            res
-                .status(201)
-                .json({ message: "commentaire publié avec succès !" })
+            res.status(201).json({ message: "comment publish with success !" })
         )
         .catch((error) => res.status(400).json({ error }));
 };
@@ -38,7 +36,9 @@ exports.updateOneMessage = (req, res) => {
         { _id: req.params.id },
         { ...req.body, content: req.body.content }
     )
-        .then((comment) => res.status(200).json({ comment }))
+        .then((comment) =>
+            res.status(200).json({ comment, message: "comment updated !" })
+        )
         .catch((error) => res.status(400).json({ error }));
 };
 
@@ -49,7 +49,7 @@ exports.deleteOneMessage = (req, res) => {
         { user_id: req.body.userId }
     )
         .then(() =>
-            res.status(201).json({ message: " message supprimé avec succès !" })
+            res.status(201).json({ message: " comment deleted with success !" })
         )
         .catch((error) => res.status(400).json({ error }));
 };
