@@ -6,20 +6,9 @@ exports.getAllMessage = (req, res, next) => {
         .then((messages) => res.status(200).json({ messages }))
         .catch((error) => res.status(400).json({ error }));
 };
+
 // get one
 exports.getOneMessage = (req, res, next) => {
-    // // version query comme sur mongoose doc
-    // const query = Message.where({ _id: req.params.id });
-    // query.findOne((err, message) => {
-    //     if (err) {
-    //         throw err;
-    //     }
-    //     if (message) {
-    //         res.status(200).json({ message });
-    //     }
-    // });
-
-    // Version plus classique
     Message.findOne({ _id: req.params.id })
         .then((comment) => res.status(200).json({ comment }))
         .catch((error) => res.status(400).json({ error }));
@@ -31,7 +20,7 @@ exports.createMessage = (req, res, next) => {
         content: req.body.content,
         topic_id: req.body.topic_id,
         user_id: req.body.user_id,
-        creationDate: req.body.creationDate,
+        creationDate: new Date(),
     });
     message
         .save()
@@ -44,7 +33,23 @@ exports.createMessage = (req, res, next) => {
 };
 
 // update one
-exports.updateOneMessage = (req, res, next) => {
-    Message.findByIdAndUpdate();
+exports.updateOneMessage = (req, res) => {
+    Message.findOneAndUpdate(
+        { _id: req.params.id },
+        { ...req.body, content: req.body.content }
+    )
+        .then((comment) => res.status(200).json({ comment }))
+        .catch((error) => res.status(400).json({ error }));
 };
+
 // delete one
+exports.deleteOneMessage = (req, res) => {
+    Message.findOneAndDelete(
+        { _id: req.params.id },
+        { user_id: req.body.userId }
+    )
+        .then(() =>
+            res.status(201).json({ message: " message supprimé avec succès !" })
+        )
+        .catch((error) => res.status(400).json({ error }));
+};
