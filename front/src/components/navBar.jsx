@@ -4,7 +4,7 @@ import mainLogo from "../assets/livre_ouvert_jaune.svg";
 
 const NavStyle = styled.nav`
     display: flex;
-    height: 60px;
+    height: 40px;
     justify-content: space-between;
     align-items: center;
     padding: 10px;
