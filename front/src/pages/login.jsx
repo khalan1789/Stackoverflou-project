@@ -1,6 +1,10 @@
 import styled from "styled-components";
 import colors from "../utils/style/colors";
 import logo from "../assets/livre_ouvert_violet.svg";
+import { Link } from "react-router-dom";
+import { useState } from "react";
+import { logUser } from "../api/api";
+import { useNavigate } from "react-router-dom";
 
 const Container = styled.div`
     display: flex;
@@ -48,28 +52,56 @@ const FormButtonStyle = styled.button`
 `;
 
 export function LogIn() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log(email, password);
+        const data = {
+            email,
+            password,
+        };
+        logUser(data)
+            .then((res) => {
+                console.log(res);
+                if (res.status === 200) {
+                    localStorage.setItem("user", JSON.stringify(res.data));
+                    return navigate("/");
+                }
+            })
+            .catch((error) => console.log(error));
+    };
+
     return (
         <Container>
             <LogoStyle src={logo} alt="logo" />
             <h1>Connectez vous !</h1>
-            <FormStyle>
+            <FormStyle onSubmit={handleSubmit}>
                 <FormInputContainerStyle>
-                    <label for="email">Email</label>
+                    <label htmlFor="email">Email</label>
                     <FormInputStyle
+                        type="email"
                         id="email"
                         placeholder="entrez votre email ici"
+                        onChange={(e) => setEmail(e.target.value)}
                     ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormInputContainerStyle>
-                    <label for="password">Mot de passe</label>
+                    <label htmlFor="password">Mot de passe</label>
                     <FormInputStyle
+                        type="password"
                         id="password"
                         placeholder="entrez votre mot de passe ici"
+                        onChange={(e) => setPassword(e.target.value)}
                     ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormButtonStyle>Log in</FormButtonStyle>
             </FormStyle>
-            <p>Pas encore de compte ? inscrivez-vous</p>
+            <p>
+                Pas encore de compte ? <Link to="/signup">inscrivez-vous</Link>
+            </p>
         </Container>
     );
 }

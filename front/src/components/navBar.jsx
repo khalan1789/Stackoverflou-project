@@ -1,14 +1,19 @@
 import styled from "styled-components";
 import colors from "../utils/style/colors";
 import mainLogo from "../assets/livre_ouvert_jaune.svg";
+import { Link } from "react-router-dom";
 
 const NavStyle = styled.nav`
     display: flex;
-    height: 40px;
-    justify-content: space-between;
     align-items: center;
-    padding: 10px;
     background-color: ${colors.backgroundLight};
+    flex-direction: column;
+    @media all and (min-width: 600px) {
+        height: 40px;
+        justify-content: space-between;
+        padding: 10px;
+        flex-direction: row;
+    }
 `;
 const LogoImgStyled = styled.img`
     height: 30px;
@@ -24,9 +29,17 @@ const LogoTitleStyled = styled.p`
 const UlStyle = styled.ul`
     display: flex;
     margin-right: 10px;
+    flex-direction: column;
+    @media all and (min-width: 600px) {
+        flex-direction: row;
+    }
 `;
 
-const NavBarBtnLog = styled.button`
+const NavBarBtnLog = styled(Link)`
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid ${colors.btnLog};
     height: 35px;
     min-width: 60px;
@@ -40,17 +53,26 @@ const NavBarBtnLog = styled.button`
     }
 `;
 
-const NavBarBtnSign = styled.button`
+const NavBarBtnSign = styled(Link)`
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     border: 1px solid ${colors.btnSign};
     height: 35px;
-    min-width: 60px;
+    min-width: 100px;
     margin-right: 10px;
+    margin-top: 20px;
     background-color: ${colors.btnSign};
     box-shadow: 0px 0px 1px 1px ${colors.btnSign};
     color: ${colors.backgroundLight};
     :hover {
         box-shadow: 0px 0px 3px 2px ${colors.btnSign};
         cursor: pointer;
+    }
+    @media all and (min-width: 600px) {
+        min-width: 60px;
+        margin-top: auto;
     }
 `;
 
@@ -62,10 +84,8 @@ export function NavBar() {
                 StackOverFlou
             </LogoTitleStyled>
             <UlStyle>
-                <NavBarBtnLog background-color={colors.secondary}>
-                    Log in
-                </NavBarBtnLog>
-                <NavBarBtnSign>Sign up</NavBarBtnSign>
+                <NavBarBtnLog to="/login">Log in</NavBarBtnLog>
+                <NavBarBtnSign to="/signup">Sign up</NavBarBtnSign>
             </UlStyle>
         </NavStyle>
     );

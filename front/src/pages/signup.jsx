@@ -1,6 +1,9 @@
 import styled from "styled-components";
 import colors from "../utils/style/colors";
 import logo from "../assets/livre_ouvert_violet.svg";
+import { Link, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { createUser } from "../api/api";
 
 const Container = styled.div`
     display: flex;
@@ -46,34 +49,83 @@ const FormInputStyle = styled.input`
 `;
 
 export function SignUp() {
+    const [email, setEmail] = useState("");
+    const [password, setPassword] = useState("");
+    const [firstname, setFirstname] = useState("");
+    const [lastname, setLastname] = useState("");
+    const [nickname, setNickname] = useState("");
+    const navigate = useNavigate();
+
+    const handleSubmit = (e) => {
+        e.preventDefault();
+
+        //use all user information to fetch
+        const data = {
+            email,
+            password,
+            firstname,
+            lastname,
+            nickname,
+        };
+        console.log(data);
+
+        // call api with data
+        createUser(data)
+            // and use status to redirect on login if ok
+            .then((res) => {
+                res.status === 201
+                    ? navigate("/login")
+                    : console.log(res.status + " en status");
+            });
+    };
+
     return (
         <Container>
             <LogoStyle src={logo} alt="logo" />
             <h1>Rejoignez-nous !</h1>
-            <FormStyle>
+            <FormStyle onSubmit={handleSubmit}>
                 <FormInputContainerStyle>
-                    <label for="firstname">Prénom</label>
-                    <FormInputStyle id="firstname"></FormInputStyle>
+                    <label htmlFor="firstname">Prénom</label>
+                    <FormInputStyle
+                        id="firstname"
+                        onChange={(e) => setFirstname(e.target.value)}
+                    ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormInputContainerStyle>
-                    <label for="lastname">Nom</label>
-                    <FormInputStyle id="lastname"></FormInputStyle>
+                    <label htmlFor="lastname">Nom</label>
+                    <FormInputStyle
+                        id="lastname"
+                        onChange={(e) => setLastname(e.target.value)}
+                    ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormInputContainerStyle>
-                    <label for="nickname">Pseudo</label>
-                    <FormInputStyle id="nickname"></FormInputStyle>
+                    <label htmlFor="nickname">Pseudo</label>
+                    <FormInputStyle
+                        id="nickname"
+                        onChange={(e) => setNickname(e.target.value)}
+                    ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormInputContainerStyle>
-                    <label for="email">Email</label>
-                    <FormInputStyle id="email"></FormInputStyle>
+                    <label htmlFor="email">Email</label>
+                    <FormInputStyle
+                        id="email"
+                        onChange={(e) => setEmail(e.target.value)}
+                        type="email"
+                    ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormInputContainerStyle>
-                    <label for="password">Mot de passe</label>
-                    <FormInputStyle id="password"></FormInputStyle>
+                    <label htmlFor="password">Mot de passe</label>
+                    <FormInputStyle
+                        id="password"
+                        type="password"
+                        onChange={(e) => setPassword(e.target.value)}
+                    ></FormInputStyle>
                 </FormInputContainerStyle>
                 <FormButtonStyle> Valider l'inscription</FormButtonStyle>
             </FormStyle>
-            <p>Déjà inscrit? Par ici</p>
+            <p>
+                Déjà inscrit? <Link to="/login"></Link>Par ici
+            </p>
         </Container>
     );
 }
