@@ -1,20 +1,21 @@
-import styled from "styled-components";
-import colors from "../utils/style/colors";
-import logo from "../assets/livre_ouvert_violet.svg";
-import { Link } from "react-router-dom";
+import styled from "styled-components"
+import colors from "../utils/style/colors"
+import logo from "../assets/livre_ouvert_violet.svg"
+import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
 
 const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-`;
+`
 const Wrapper = styled.div`
     border: 1px solid ${colors.primary};
     width: 80%;
     display flex;
     flex-direction: column; 
-`;
+`
 
 const PseudoStyle = styled.h1`
     display: flex;
@@ -24,7 +25,7 @@ const PseudoStyle = styled.h1`
     color: white;
     font-style: italic;
     padding-right: 15px;
-`;
+`
 
 const InfoWrapper = styled.div`
     display: flex;
@@ -34,7 +35,7 @@ const InfoWrapper = styled.div`
     @media all and (min-width: 600px) {
         flex-direction: row;
     }
-`;
+`
 const AvatarContainerStyle = styled.div`
     width: 100%;
     display: flex;
@@ -46,13 +47,13 @@ const AvatarContainerStyle = styled.div`
     @media all and (min-width: 600px) {
         width: 50%;
     }
-`;
+`
 const AvatarStyle = styled.img`
     height: 120px;
     @media all and (min-width: 600px) {
         height: 90px;
     }
-`;
+`
 
 const TextInfosContainerStyle = styled.div`
     height: 100%;
@@ -60,7 +61,7 @@ const TextInfosContainerStyle = styled.div`
     display: flex;
     flex-direction: column;
     align-items: center;
-`;
+`
 
 const ModificationButtonStyle = styled.button`
     margin-bottom: 15px;
@@ -69,7 +70,7 @@ const ModificationButtonStyle = styled.button`
     background-color: ${colors.primary};
     color: white;
     border-radius: 5%;
-`;
+`
 
 const BackButtonStyle = styled(Link)`
     text-decoration: none;
@@ -86,13 +87,14 @@ const BackButtonStyle = styled(Link)`
         cursor: pointer;
         box-shadow: 0px 0px 1px 1px ${colors.primary};
     }
-`;
+`
 export function Profile() {
+    const user = useSelector((state) => state.user.infos)
     return (
         <Container>
             <Wrapper>
                 <PseudoStyle>
-                    Pseudonyme
+                    {user.nickname}
                     {/*ici on va mettre le pseudo en haut du bandeau de l'onglet */}
                 </PseudoStyle>
                 <InfoWrapper>
@@ -104,10 +106,11 @@ export function Profile() {
                         </ModificationButtonStyle>
                     </AvatarContainerStyle>
                     <TextInfosContainerStyle>
-                        <h3>Name</h3>
-                        <h3>firstname</h3>
-                        <h3>email</h3>
-                        <h3>password</h3>
+                        {/* Container à transformer en form ou vers un form au clic ? */}
+                        <h3>{user.lastname}</h3>
+                        <h3>{user.firstname}</h3>
+                        <h3>{user.email}</h3>
+                        <h3>{user.password}</h3>
                         <ModificationButtonStyle>
                             Modifier mes informations
                         </ModificationButtonStyle>
@@ -116,7 +119,7 @@ export function Profile() {
             </Wrapper>
             <BackButtonStyle to="/">Retour à l'acceuil</BackButtonStyle>
         </Container>
-    );
+    )
 }
 
 /* zone pour passage en mode mobile first

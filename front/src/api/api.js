@@ -1,22 +1,25 @@
 // fichier pour les calls api
-import axios from "axios";
-// import { useNavigate } from "react-router-dom";
+import axios from "axios"
+import { useDispatch } from "react-redux"
+import { useNavigate } from "react-router-dom"
+import { logOutUser } from "../store/reducers/userReducer"
+import { logInUser } from "../store/reducers/userReducer"
 
 // create a base url for all request
 const instance = axios.create({
     baseURL: "http://localhost:9000/api/",
-});
+})
 
 export function logUser(data) {
     // add login route to the url
-    const loginUrl = "login";
+    const loginUrl = "login"
 
-    return instance.post(loginUrl, data);
+    return instance.post(loginUrl, data)
 }
 
 export function createUser(data) {
     // part of signup route
-    const signupUrl = "signup";
+    const signupUrl = "signup"
 
     return instance
         .post(signupUrl, data)
@@ -25,12 +28,31 @@ export function createUser(data) {
             //     ? console.log(response.data)
             //     : console.log(response.status)
             {
-                return response;
+                return response
             }
         )
-        .catch((error) => console.log(error));
+        .catch((error) => console.log(error))
 }
 
+export function getUserInfos(token) {
+    const userUrl = "/auth/checkToken"
+
+    console.log("tok check : " + token)
+    return instance
+        .get(userUrl, { headers: { authorization: token } })
+        .then((response) => {
+            return response.data
+        })
+        .catch((error) => console.log(error))
+}
+
+// export function LogOut() {
+//     const dispatch = useDispatch()
+//     // const navigate = useNavigate()
+
+//     dispatch(logOutUser)
+//     localStorage.removeItem("stack-overflou-token")
+// }
 /* 
 loguser version 1 
 export function logUser(email, password) {
@@ -54,4 +76,17 @@ export function logUser(email, password) {
         .catch((error) => console.log(error));
 }
 
+
+// version 1 de getUserInfos
+export function getUserInfos() {
+    const userUrl = "/auth/checkToken"
+    const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
+    console.log("tok check : " + token)
+    return instance
+        .get(userUrl, { headers: { authorization: token } })
+        .then((response) => {
+            return response
+        })
+        .catch((error) => console.log(error))
+}
 */

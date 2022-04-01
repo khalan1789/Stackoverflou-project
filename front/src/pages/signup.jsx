@@ -1,21 +1,22 @@
-import styled from "styled-components";
-import colors from "../utils/style/colors";
-import logo from "../assets/livre_ouvert_violet.svg";
-import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
-import { createUser } from "../api/api";
+import styled from "styled-components"
+import colors from "../utils/style/colors"
+import logo from "../assets/livre_ouvert_violet.svg"
+import { Link, useNavigate } from "react-router-dom"
+import { useState } from "react"
+import { createUser } from "../api/api"
+import { LogFormButton } from "../components/buttons/logFormButton"
 
 const Container = styled.div`
     display: flex;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-`;
+`
 
 const LogoStyle = styled.img`
     height: 50px;
     margin-top: 10px;
-`;
+`
 
 const FormStyle = styled.form`
     display: flex;
@@ -25,14 +26,7 @@ const FormStyle = styled.form`
     border-radius: 5px;
     min-width: 280px;
     padding: 10px;
-`;
-
-const FormButtonStyle = styled.button`
-    background-color: ${colors.backgroundLight};
-    color: white;
-    border-radius: 5px;
-    height: 30px;
-`;
+`
 
 const FormInputContainerStyle = styled.div`
     display: flex;
@@ -40,24 +34,24 @@ const FormInputContainerStyle = styled.div`
     flex-direction: column;
     width: 100%;
     margin-bottom: 10px;
-`;
+`
 
 const FormInputStyle = styled.input`
     display: flex;
     height: 25px;
     padding: 1px;
-`;
+`
 
 export function SignUp() {
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [firstname, setFirstname] = useState("");
-    const [lastname, setLastname] = useState("");
-    const [nickname, setNickname] = useState("");
-    const navigate = useNavigate();
+    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState("")
+    const [firstname, setFirstname] = useState("")
+    const [lastname, setLastname] = useState("")
+    const [nickname, setNickname] = useState("")
+    const navigate = useNavigate()
 
     const handleSubmit = (e) => {
-        e.preventDefault();
+        e.preventDefault()
 
         //use all user information to fetch
         const data = {
@@ -66,8 +60,8 @@ export function SignUp() {
             firstname,
             lastname,
             nickname,
-        };
-        console.log(data);
+        }
+        console.log(data) /* /////CONSOLE LOG\\\\\\\ */
 
         // call api with data
         createUser(data)
@@ -75,9 +69,9 @@ export function SignUp() {
             .then((res) => {
                 res.status === 201
                     ? navigate("/login")
-                    : console.log(res.status + " en status");
-            });
-    };
+                    : console.log(res.status + " en status")
+            })
+    }
 
     return (
         <Container>
@@ -121,13 +115,13 @@ export function SignUp() {
                         onChange={(e) => setPassword(e.target.value)}
                     ></FormInputStyle>
                 </FormInputContainerStyle>
-                <FormButtonStyle> Valider l'inscription</FormButtonStyle>
+                <LogFormButton text={"Valider l'inscription"} />
             </FormStyle>
             <p>
                 Déjà inscrit? <Link to="/login"></Link>Par ici
             </p>
         </Container>
-    );
+    )
 }
 
 // il faut un champ firstname / lastname / nickname / email / mdp
