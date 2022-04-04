@@ -2,7 +2,7 @@ import { useSelector, useDispatch } from "react-redux"
 import styled from "styled-components"
 import colors from "../utils/style/colors"
 import { logInUser, logOutUser } from "../store/reducers/userReducer"
-import { useNavigate } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import { useEffect } from "react"
 import { getUserInfos, LogOut } from "../api/api"
 import { Topic } from "../components/layout/topic"
@@ -14,9 +14,8 @@ export function Home() {
     const dispatch = useDispatch()
 
     function logOut() {
-        dispatch(logOutUser) // à voir pour sortir la logique dans un autre fichier
+        dispatch(logOutUser()) // à voir pour sortir la logique dans un autre fichier
         localStorage.removeItem("stack-overflou-token")
-        localStorage.removeItem("user")
         navigate("/login")
     }
 
@@ -34,6 +33,7 @@ export function Home() {
     // }, [dispatch])
     return (
         <HomeContainer>
+            <Link to="/profile">Page profil</Link>
             <MainTitleStyled>Bienvenue sur stackoverflou </MainTitleStyled>
             <H3TitleStyled>L'endroit où l'on voit plus net après</H3TitleStyled>
             <p>
@@ -45,6 +45,8 @@ export function Home() {
         </HomeContainer>
     )
 }
+
+/* STYLE AND CSS */
 
 const HomeContainer = styled.div`
     display: flex;

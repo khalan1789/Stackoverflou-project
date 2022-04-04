@@ -1,7 +1,31 @@
-import styled from "styled-components";
-import colors from "../utils/style/colors";
-import mainLogo from "../assets/livre_ouvert_jaune.svg";
-import { Link } from "react-router-dom";
+import styled from "styled-components"
+import colors from "../utils/style/colors"
+import mainLogo from "../assets/livre_ouvert_jaune.svg"
+import { Link } from "react-router-dom"
+import { useSelector } from "react-redux"
+
+export function NavBar() {
+    const isLogged = useSelector((state) => state.isLogged)
+    return (
+        <NavStyle>
+            <LogoTitleStyled to="/home">
+                <LogoImgStyled src={mainLogo} alt="logo stackoverflou" />
+                StackOverFlou
+            </LogoTitleStyled>
+            <UlStyle>
+                {isLogged ? (
+                    <NavBarBtnSign to="/profile">Mon profil</NavBarBtnSign>
+                ) : (
+                    ""
+                )}
+                <NavBarBtnLog to="/login">Log in</NavBarBtnLog>
+                <NavBarBtnSign to="/signup">Sign up</NavBarBtnSign>
+            </UlStyle>
+        </NavStyle>
+    )
+}
+
+/* STYLE AND CSS */
 
 const NavStyle = styled.nav`
     display: flex;
@@ -14,17 +38,18 @@ const NavStyle = styled.nav`
         padding: 10px;
         flex-direction: row;
     }
-`;
+`
 const LogoImgStyled = styled.img`
     height: 30px;
     margin-right: 20px;
-`;
+`
 
-const LogoTitleStyled = styled.p`
+const LogoTitleStyled = styled(Link)`
     color: ${colors.secondary};
     display: flex;
     font-size: 1.2rem;
-`;
+    text-decoration: none;
+`
 
 const UlStyle = styled.ul`
     display: flex;
@@ -33,7 +58,7 @@ const UlStyle = styled.ul`
     @media all and (min-width: 600px) {
         flex-direction: row;
     }
-`;
+`
 
 const NavBarBtnLog = styled(Link)`
     text-decoration: none;
@@ -51,7 +76,7 @@ const NavBarBtnLog = styled(Link)`
         box-shadow: 0px 0px 3px 2px ${colors.btnLog};
         cursor: pointer;
     }
-`;
+`
 
 const NavBarBtnSign = styled(Link)`
     text-decoration: none;
@@ -74,21 +99,6 @@ const NavBarBtnSign = styled(Link)`
         min-width: 60px;
         margin-top: auto;
     }
-`;
+`
 
-export function NavBar() {
-    return (
-        <NavStyle>
-            <LogoTitleStyled>
-                <LogoImgStyled src={mainLogo} alt="logo stackoverflou" />{" "}
-                StackOverFlou
-            </LogoTitleStyled>
-            <UlStyle>
-                <NavBarBtnLog to="/login">Log in</NavBarBtnLog>
-                <NavBarBtnSign to="/signup">Sign up</NavBarBtnSign>
-            </UlStyle>
-        </NavStyle>
-    );
-}
-
-export default NavBar;
+export default NavBar

@@ -4,6 +4,7 @@ const colors = {
     backgroundLight: "#6512b0",
     btnLog: "#f6f7dd",
     btnSign: "#eaf760",
-};
+    danger: "#f21616",
+}
 
-export default colors;
+export default colors

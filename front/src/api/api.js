@@ -1,9 +1,5 @@
 // fichier pour les calls api
 import axios from "axios"
-import { useDispatch } from "react-redux"
-import { useNavigate } from "react-router-dom"
-import { logOutUser } from "../store/reducers/userReducer"
-import { logInUser } from "../store/reducers/userReducer"
 
 // create a base url for all request
 const instance = axios.create({
@@ -14,7 +10,12 @@ export function logUser(data) {
     // add login route to the url
     const loginUrl = "login"
 
-    return instance.post(loginUrl, data)
+    return instance
+        .post(loginUrl, data) // problème après pour la gestion de la réponse
+        .then((response) => {
+            return response
+        })
+        .catch((error) => console.log("je passe au catch du api : " + error))
 }
 
 export function createUser(data) {

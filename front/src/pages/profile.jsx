@@ -4,6 +4,56 @@ import logo from "../assets/livre_ouvert_violet.svg"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 
+export function Profile() {
+    const user = useSelector((state) => state.user.infos)
+    return (
+        <Container>
+            <Wrapper>
+                <PseudoStyle>
+                    {user.nickname !== null ? user.nickname : "pas de nickname"}
+                    {/*ici on va mettre le pseudo en haut du bandeau de l'onglet */}
+                </PseudoStyle>
+                <InfoWrapper>
+                    {/*un côté gauche pour la photo et l'autre pour les infos ?*/}
+                    <AvatarContainerStyle>
+                        <AvatarStyle src={logo} alt="avatar utilisateur" />
+                        <ModificationButtonStyle>
+                            changer la photo
+                        </ModificationButtonStyle>
+                    </AvatarContainerStyle>
+                    <TextInfosContainerStyle>
+                        {/* Container à transformer en form ou vers un form au clic ? */}
+                        <h3>
+                            {user.lastname !== null
+                                ? user.lastname
+                                : "pas de lastname"}
+                        </h3>
+                        <h3>
+                            {user.firstname !== null
+                                ? user.firstname
+                                : "pas de firstname"}
+                        </h3>
+                        <h3>
+                            {user.email !== null ? user.email : "pas de email"}
+                        </h3>
+                        <h3>
+                            {user.password !== null
+                                ? user.password
+                                : "pas de password"}
+                        </h3>
+                        <ModificationButtonStyle>
+                            Modifier mes informations
+                        </ModificationButtonStyle>
+                    </TextInfosContainerStyle>
+                </InfoWrapper>
+            </Wrapper>
+            <BackButtonStyle to="/home">Retour à l'acceuil</BackButtonStyle>
+        </Container>
+    )
+}
+
+/* STYLE AND CSS */
+
 const Container = styled.div`
     display: flex;
     justify-content: center;
@@ -88,39 +138,6 @@ const BackButtonStyle = styled(Link)`
         box-shadow: 0px 0px 1px 1px ${colors.primary};
     }
 `
-export function Profile() {
-    const user = useSelector((state) => state.user.infos)
-    return (
-        <Container>
-            <Wrapper>
-                <PseudoStyle>
-                    {user.nickname}
-                    {/*ici on va mettre le pseudo en haut du bandeau de l'onglet */}
-                </PseudoStyle>
-                <InfoWrapper>
-                    {/*un côté gauche pour la photo et l'autre pour les infos ?*/}
-                    <AvatarContainerStyle>
-                        <AvatarStyle src={logo} alt="avatar utilisateur" />
-                        <ModificationButtonStyle>
-                            changer la photo
-                        </ModificationButtonStyle>
-                    </AvatarContainerStyle>
-                    <TextInfosContainerStyle>
-                        {/* Container à transformer en form ou vers un form au clic ? */}
-                        <h3>{user.lastname}</h3>
-                        <h3>{user.firstname}</h3>
-                        <h3>{user.email}</h3>
-                        <h3>{user.password}</h3>
-                        <ModificationButtonStyle>
-                            Modifier mes informations
-                        </ModificationButtonStyle>
-                    </TextInfosContainerStyle>
-                </InfoWrapper>
-            </Wrapper>
-            <BackButtonStyle to="/">Retour à l'acceuil</BackButtonStyle>
-        </Container>
-    )
-}
 
 /* zone pour passage en mode mobile first
 
