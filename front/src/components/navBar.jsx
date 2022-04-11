@@ -1,11 +1,20 @@
 import styled from "styled-components"
 import colors from "../utils/style/colors"
 import mainLogo from "../assets/livre_ouvert_jaune.svg"
-import { Link } from "react-router-dom"
-import { useSelector } from "react-redux"
+import { Link, useNavigate } from "react-router-dom"
+import { useDispatch, useSelector } from "react-redux"
+import { logOutUser } from "../store/reducers/userReducer"
 
 export function NavBar() {
-    const isLogged = useSelector((state) => state.isLogged)
+    const isLogged = useSelector((state) => state.user.isLogged)
+    const navigate = useNavigate()
+    const dispatch = useDispatch()
+
+    function logOut() {
+        dispatch(logOutUser()) // à voir pour sortir la logique dans un autre fichier
+        localStorage.removeItem("stack-overflou-token")
+        navigate("/login")
+    }
     return (
         <NavStyle>
             <LogoTitleStyled to="/home">
@@ -13,13 +22,22 @@ export function NavBar() {
                 StackOverFlou
             </LogoTitleStyled>
             <UlStyle>
-                {isLogged ? (
-                    <NavBarBtnSign to="/profile">Mon profil</NavBarBtnSign>
+                {isLogged === true ? (
+                    <>
+                        <NavBarBtnProfile to="/profile">
+                            Mon profil
+                        </NavBarBtnProfile>
+
+                        <NavBarBtnLogOut onClick={() => logOut()}>
+                            Déconnexion
+                        </NavBarBtnLogOut>
+                    </>
                 ) : (
-                    ""
+                    <>
+                        <NavBarBtnLog to="/login">Log in</NavBarBtnLog>
+                        <NavBarBtnSign to="/signup">Sign up</NavBarBtnSign>
+                    </>
                 )}
-                <NavBarBtnLog to="/login">Log in</NavBarBtnLog>
-                <NavBarBtnSign to="/signup">Sign up</NavBarBtnSign>
             </UlStyle>
         </NavStyle>
     )
@@ -30,7 +48,7 @@ export function NavBar() {
 const NavStyle = styled.nav`
     display: flex;
     align-items: center;
-    background-color: ${colors.backgroundLight};
+    background-color: ${colors.primary};
     flex-direction: column;
     @media all and (min-width: 600px) {
         height: 40px;
@@ -90,7 +108,7 @@ const NavBarBtnSign = styled(Link)`
     margin-top: 20px;
     background-color: ${colors.btnSign};
     box-shadow: 0px 0px 1px 1px ${colors.btnSign};
-    color: ${colors.backgroundLight};
+    color: ${colors.primary};
     :hover {
         box-shadow: 0px 0px 3px 2px ${colors.btnSign};
         cursor: pointer;
@@ -99,6 +117,69 @@ const NavBarBtnSign = styled(Link)`
         min-width: 60px;
         margin-top: auto;
     }
+`
+const NavBarBtnProfile = styled(Link)`
+    padding: 0px 1px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid ${colors.btnLog};
+    height: 35px;
+    min-width: 60px;
+    margin-right: 10px;
+    background-color: white;
+    box-shadow: 0px 0px 1px 1px ${colors.btnLog};
+    color: ${colors.primary};
+    margin-bottom: 20px;
+    :hover {
+        box-shadow: 0px 0px 3px 2px ${colors.btnLog};
+        cursor: pointer;
+    }
+    @media all and (min-width: 600px) {
+        min-width: 60px;
+        margin-bottom: auto;
+    }
+`
+
+const NavBarBtnLogOut = styled.button`
+    padding: 1px 2px;
+    text-decoration: none;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border: 1px solid ${colors.secondary};
+    height: 35px;
+    min-width: 60px;
+    margin-right: 10px;
+    background-color: transparent;
+    // box-shadow: 0px 0px 1px 1px ${colors.btnLog};
+    color: ${colors.secondary};
+    :hover {
+        box-shadow: 0px 0px 3px 2px ${colors.btnLog};
+        cursor: pointer;
+    }
+    // padding: 1px 2px;
+    // text-decoration: none;
+    // display: flex;
+    // justify-content: center;
+    // align-items: center;
+    // border: 1px solid ${colors.btnLog};
+    // height: 35px;
+    // min-width: 60px;
+    // margin-right: 10px;
+    // background-color: white;
+    // box-shadow: 0px 0px 1px 1px ${colors.btnLog};
+    // color: ${colors.primary};
+    // margin-bottom: 20px;
+    // :hover {
+    //     box-shadow: 0px 0px 3px 2px ${colors.btnLog};
+    //     cursor: pointer;
+    // }
+    // @media all and (min-width: 600px) {
+    //     min-width: 60px;
+    //     margin-bottom: auto;
+    // }
 `
 
 export default NavBar

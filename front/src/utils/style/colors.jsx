@@ -1,9 +1,11 @@
 const colors = {
-    primary: "#5843E4",
+    primary: "#6512b0",
     secondary: "#e6f72d",
-    backgroundLight: "#6512b0",
+    backgroundBase: "#fffff9db",
+    backgroundLight: "#f5f2f7",
     btnLog: "#f6f7dd",
     btnSign: "#eaf760",
+    btnProfile: "#a94fdb",
     danger: "#f21616",
 }
 

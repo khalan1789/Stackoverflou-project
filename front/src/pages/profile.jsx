@@ -23,24 +23,12 @@ export function Profile() {
                     </AvatarContainerStyle>
                     <TextInfosContainerStyle>
                         {/* Container à transformer en form ou vers un form au clic ? */}
-                        <h3>
-                            {user.lastname !== null
-                                ? user.lastname
-                                : "pas de lastname"}
-                        </h3>
-                        <h3>
-                            {user.firstname !== null
-                                ? user.firstname
-                                : "pas de firstname"}
-                        </h3>
-                        <h3>
-                            {user.email !== null ? user.email : "pas de email"}
-                        </h3>
-                        <h3>
-                            {user.password !== null
-                                ? user.password
-                                : "pas de password"}
-                        </h3>
+                        <H3InfosUserStyled>
+                            {user.firstname} {user.lastname}
+                        </H3InfosUserStyled>
+                        {/* <value={user.lastname} /> */}
+                        <H3InfosUserStyled>{user.email}</H3InfosUserStyled>
+                        <H3InfosUserStyled>{user.password}</H3InfosUserStyled>
                         <ModificationButtonStyle>
                             Modifier mes informations
                         </ModificationButtonStyle>
@@ -59,12 +47,15 @@ const Container = styled.div`
     justify-content: center;
     align-items: center;
     flex-direction: column;
+    margin-top: 10%;
 `
 const Wrapper = styled.div`
     border: 1px solid ${colors.primary};
     width: 80%;
     display flex;
     flex-direction: column; 
+    background-color: ${colors.btnLog};
+    border: 2px solid ${colors.primary};
 `
 
 const PseudoStyle = styled.h1`
@@ -73,8 +64,10 @@ const PseudoStyle = styled.h1`
     align-items: center;
     background-color: ${colors.primary};
     color: white;
+    // border-bottom: solid 5px ${colors.primary};
     font-style: italic;
     padding-right: 15px;
+    margin-top: 0px;
 `
 
 const InfoWrapper = styled.div`
@@ -82,6 +75,7 @@ const InfoWrapper = styled.div`
     width: 100%;
     flex-direction: column;
     align-items: center;
+    // background-color: ${colors.btnLog};
     @media all and (min-width: 600px) {
         flex-direction: row;
     }
@@ -92,7 +86,7 @@ const AvatarContainerStyle = styled.div`
     align-items: center;
     justify-content: space-between;
     flex-direction: column;
-    background-color: yellow;
+    // background-color: white;
     min-height: 200px;
     @media all and (min-width: 600px) {
         width: 50%;
@@ -117,9 +111,9 @@ const ModificationButtonStyle = styled.button`
     margin-bottom: 15px;
     margin-top: 10px;
     border: 1px solid ${colors.primary};
-    background-color: ${colors.primary};
-    color: white;
-    border-radius: 5%;
+    background-color: white;
+    color: ${colors.primary};
+    cursor: pointer;
 `
 
 const BackButtonStyle = styled(Link)`
@@ -137,6 +131,10 @@ const BackButtonStyle = styled(Link)`
         cursor: pointer;
         box-shadow: 0px 0px 1px 1px ${colors.primary};
     }
+`
+
+const H3InfosUserStyled = styled.h3`
+    color: ${colors.primary};
 `
 
 /* zone pour passage en mode mobile first

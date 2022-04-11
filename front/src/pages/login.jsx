@@ -79,7 +79,10 @@ export function LogIn() {
         <Container>
             <LogoStyle src={logo} alt="logo" />
             <h1>Connectez vous !</h1>
-            <FormStyle onSubmit={handleSubmit} disabled={isDisabled}>
+            <FormStyle
+                onSubmit={handleSubmit}
+                disabled={isDisabled ? "disabled" : ""}
+            >
                 <FormInputContainerStyle>
                     <label htmlFor="email">Email</label>
                     <FormInputStyle
@@ -99,7 +102,7 @@ export function LogIn() {
                     ></FormInputStyle>
                 </FormInputContainerStyle>
                 {invalidateInputs ? <InvalidateLoginAction /> : ""}
-                <LogFormButton text={"Log In"} disabled={isDisabled} />
+                <LogFormButton text={"Log In"} />
             </FormStyle>
             <p>
                 Pas encore de compte ? <Link to="/signup">Inscrivez-vous</Link>
@@ -131,7 +134,7 @@ const FormStyle = styled.form`
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    box-shadow: 0px 0px 4px 2px ${colors.backgroundLight};
+    box-shadow: 0px 0px 4px 2px ${colors.primary};
     border-radius: 5px;
     min-width: 280px;
     padding: 10px;

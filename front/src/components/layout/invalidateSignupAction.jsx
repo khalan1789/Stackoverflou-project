@@ -13,6 +13,7 @@ export default function InvalidateSignupAction() {
 /* STYLE AND CSS */
 
 const SmallInputAlert = styled.small`
+    display: flex;
     font-style: italic;
     color: ${colors.danger};
 `

@@ -127,7 +127,7 @@ const FormStyle = styled.form`
     display: flex;
     justify-content: space-between;
     flex-direction: column;
-    box-shadow: 0px 0px 4px 2px ${colors.backgroundLight};
+    box-shadow: 0px 0px 4px 2px ${colors.primary};
     border-radius: 5px;
     min-width: 280px;
     padding: 10px;
