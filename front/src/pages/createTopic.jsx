@@ -1,21 +1,36 @@
 import { useState } from "react"
 import { useSelector } from "react-redux"
-import { Link } from "react-router-dom"
+import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
-import { TopicFormButton } from "../components/buttons/topicFromButton"
-// import { createTopic } from "../../api/topicApi"
+import { createTopic } from "../api/topicApi"
+import { TopicFormButton } from "../components/buttons/topicFormButton"
+import PublishFailedAction from "../components/layout/publishFailed"
+
 import colors from "../utils/style/colors"
 
 export function CreateTopic() {
+    const navigate = useNavigate()
+
     // data to send
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
+    const userId = useSelector((state) => state.user.infos.userId)
 
-    async function FormSubmit(e) {
-        const userId = useSelector((state) => state.user.infos.userId)
+    //to alert user if an error occured
+    const [publishFailed, setPublishFailed] = useState(false)
+
+    // to delete inputs
+    function eraseInputs() {
+        setDescription("")
+        setTitle("")
+        document.getElementById("Description").value = ""
+        document.getElementById("Title").value = ""
+    }
+
+    function FormSubmit(e) {
         e.preventDefault()
         const data = {
-            userId,
+            user_id: userId,
             title,
             description,
         }
@@ -23,31 +38,28 @@ export function CreateTopic() {
         console.log("id : " + data.userId)
         console.log("title : " + data.title)
         console.log("description : " + data.description)
-        // try {
-        //     createTopic(data)
-        //         .then((response) =>
-        //             console.log("status suite post " + response.status)
-        //         )
-        //         .catch((error) => console.log(error))
-        //     setDescription("")
-        //     setTitle("")
-        //     document.getElementById("Description").value = ""
-        //     document.getElementById("Title").value = ""
-        // } catch {
-        //     console.log("erreur de post")
-        // }
-        // createTopic(data)
 
-        setDescription("")
-        setTitle("")
-        document.getElementById("Description").value = ""
-        document.getElementById("Title").value = ""
+        createTopic(data)
+            .then((res) =>
+                res.status === 201
+                    ? (window.alert("article publié avec succès !"),
+                      navigate("/home"))
+                    : setPublishFailed(true)
+            )
+            .catch((err) => console.log(err))
+
+        eraseInputs()
     }
 
     return (
         <FormContainerStyle>
-            <TitleStyle>Publication d'un article</TitleStyle>
+            <HeaderStyle>
+                <CancelButton to="/home">X</CancelButton>
+                <TitleStyle>Publication d'un article</TitleStyle>
+            </HeaderStyle>
+
             <FormStyle onSubmit={FormSubmit}>
+                {publishFailed === true ? <PublishFailedAction /> : ""}
                 <FormInputContainerStyle>
                     <FormLabelStyle htmlFor="Title">
                         Titre de l'article
@@ -72,7 +84,9 @@ export function CreateTopic() {
                     />
                 </FormInputContainerStyle>
                 <TopicFormButton text={"Publier"}></TopicFormButton>
-                <FormCancelLink>Annuler</FormCancelLink>
+                <FormCancelLink onClick={() => eraseInputs()}>
+                    Effacer tout
+                </FormCancelLink>
             </FormStyle>
         </FormContainerStyle>
     )
@@ -81,7 +95,6 @@ export function CreateTopic() {
 /* STYLE AND CSS */
 
 const FormContainerStyle = styled.div`
-    border: 1px solid green;
     display: flex;
     flex-direction: column;
     // width: 100%;
@@ -94,10 +107,10 @@ const TitleStyle = styled.h2`
 `
 
 const FormStyle = styled.form`
-    border: 1px solid pink;
     display: flex;
     flex-direction: column;
     width: 90%;
+    max-width: 900px;
 `
 const FormInputContainerStyle = styled.div`
     display: flex;
@@ -135,4 +148,42 @@ const FormCancelLink = styled.button`
         border: none;
         box-shadow: 0px 0px 1px 2px ${colors.primary};
     }
+`
+// cancel link
+const CancelButton = styled(Link)`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    align-self: end;
+    width: 50px;
+    height: 50px;
+    margin-right: 25px;
+    margin-bottom: 15px;
+    border: solid 1px ${colors.primary};
+    background-color: ${colors.backgroundLight};
+    color: ${colors.primary};
+    text-decoration: none;
+    border-radius: 50%;
+    :hover {
+        cursor: pointer;
+        background-color: ${colors.primary};
+        color: ${colors.backgroundLight};
+        font-weight: bold;
+    }
+    @media all and (min-width: 1000px) {
+        margin-right: 30px;
+    }
+    @media all and (min-width: 1250px) {
+        height: 40px;
+        width: 40px;
+        // margin-right: 10%;
+    }
+`
+
+// header on the top of the form
+const HeaderStyle = styled.div`
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+    max-width: 1200px;
 `

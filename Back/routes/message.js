@@ -8,6 +8,7 @@ const auth = require("../middleware/auth");
 const messageCtrl = require("../controllers/message");
 
 router.get("/", messageCtrl.getAllMessage);
+router.get("/by_topic/:id", messageCtrl.getAllTopicMessage);
 router.get("/:id", messageCtrl.getOneMessage);
 
 router.post("/", auth, messageCtrl.createMessage);

@@ -15,7 +15,10 @@ export const userSlice = createSlice({
             state.isLogged = false
             state.infos = null
         },
+        updateReduxUserInfos: (state, action) => {
+            state.infos = action.payload
+        },
     },
 })
-export const { logInUser, logOutUser } = userSlice.actions
+export const { logInUser, logOutUser, updateReduxUserInfos } = userSlice.actions
 export default userSlice.reducer

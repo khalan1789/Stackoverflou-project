@@ -1,25 +1,29 @@
-import { Link, useNavigate } from "react-router-dom"
+import { Link } from "react-router-dom"
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
+import editDate from "../../utils/helper/editDate"
 
-export function ResumeTopic({ title, description, date, id }) {
-    const navigate = useNavigate()
-
-    // const justDate = (createAt) => {
-    //     const date = createAt.split("T")[0]
-    //     return date.split("-").reverse().join("-")
+export function ResumeTopic({ title, date, id }) {
+    // const [initialDate, setInitialDate] = useState()
+    // setInitialDate(date)
+    const editedDate = editDate(date)
+    // async function transformDate(dateToTransform) {
+    //     const newDate = editDate(dateToTransform)
+    //     return newDate // bloqué ici à voir pour utiliser un state là
     // }
-    // à prévoir que le composant recoive en paramètre le titre / pseudo / date / et les com associés
+
+    // const initialDate = transformDate(date)
     return (
         <TopicContainer>
             <TopicHeaderContainer>
                 <TopicTitleStyle>{title} </TopicTitleStyle>
                 <PublisherInfosContainer>
                     <p>Pseudo</p>
-                    <p>{date}</p>
+                    <p>{editedDate} </p>
+                    {/* <small>{initialDate}</small> */}
                 </PublisherInfosContainer>
             </TopicHeaderContainer>
-            <Link to={"/topic/?id=" + id}>Voir l'article</Link>
+            <LinkStyle to={"/topic/?id=" + id}>Voir l'article</LinkStyle>
             {/* à voir si on met la gestion de pj */}
         </TopicContainer>
     )
@@ -33,6 +37,8 @@ const TopicContainer = styled.div`
     border: 1px solid ${colors.primary};
     box-shadow: 0px 0px 1px 1px;
     margin-top: 30px;
+    // max-width: 750px;
+    width: 100%;
 `
 const TopicHeaderContainer = styled.div`
     display: flex;
@@ -42,14 +48,25 @@ const TopicHeaderContainer = styled.div`
     box-shadow: 0px 2px 0px 0px ${colors.primary};
     @media all and (min-width: 650px) {
         justify-content: space-between;
-        flex-direction: row;
+        flex-direction: column;
     } ;
 `
 
 const TopicTitleStyle = styled.h3`
     font-style: italic;
-    border: solid 1px black;
     min-height: 50%;
+    margin-left: 10px;
+    margin-right: 5px;
+    // text-align: center;
+    // justify-content: center;
+    // margin-left: 5px;
+    // margin-right: 5px;
+    // flex-wrap: wrap;
+    // display: flex;
+    @media all and (min-width: 650px) {
+        width: 100%;
+        align-self: center;
+    }
 `
 const PublisherInfosContainer = styled.div`
     display: flex;
@@ -58,6 +75,15 @@ const PublisherInfosContainer = styled.div`
     padding: 1%;
     @media all and (min-width: 650px) {
         border-bottom: 0px;
-        // flex-direction: column;
     } ;
+`
+const LinkStyle = styled(Link)`
+    text-align: center;
+    text-decoration: none;
+    background-color: ${colors.primary};
+    color: ${colors.secondary};
+    :hover {
+        background-color: ${colors.btnProfile};
+        font-weight: bold;
+    }
 `

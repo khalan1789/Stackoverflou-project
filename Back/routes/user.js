@@ -17,4 +17,7 @@ router.get("/auth/checkToken", authWithToken, userCtrl.checkToken);
 // get the user after check
 router.get("/user/", authWithToken, userCtrl.getOneUser);
 
+// update user
+router.put("/user/:id", authWithToken, userCtrl.updateOneUser);
+
 module.exports = router;

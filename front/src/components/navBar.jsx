@@ -89,7 +89,7 @@ const NavBarBtnLog = styled(Link)`
     margin-right: 10px;
     background-color: ${colors.btnLog};
     box-shadow: 0px 0px 1px 1px ${colors.btnLog};
-    color: ${colors.backgroundLight};
+    color: ${colors.primary};
     :hover {
         box-shadow: 0px 0px 3px 2px ${colors.btnLog};
         cursor: pointer;

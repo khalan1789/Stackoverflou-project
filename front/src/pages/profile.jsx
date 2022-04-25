@@ -3,39 +3,52 @@ import colors from "../utils/style/colors"
 import logo from "../assets/livre_ouvert_violet.svg"
 import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
+import { useEffect } from "react"
+import { useState } from "react"
+import BackToHomeButton from "../components/buttons/backToHomeButton"
 
 export function Profile() {
+    // check user infos from redux
     const user = useSelector((state) => state.user.infos)
+
+    //states for the view
+    const [nickname, setNickname] = useState("")
+    const [lastname, setLastname] = useState("")
+    const [firstname, setFirstname] = useState("")
+    const [email, setEmail] = useState("")
+
+    useEffect(() => {
+        if (user !== null) {
+            setNickname(user.nickname)
+            setLastname(user.lastname)
+            setFirstname(user.firstname)
+            setEmail(user.email)
+        }
+    }, [user])
     return (
         <Container>
             <Wrapper>
-                <PseudoStyle>
-                    {user.nickname !== null ? user.nickname : "pas de nickname"}
-                    {/*ici on va mettre le pseudo en haut du bandeau de l'onglet */}
-                </PseudoStyle>
+                <PseudoStyle>{nickname}</PseudoStyle>
                 <InfoWrapper>
                     {/*un côté gauche pour la photo et l'autre pour les infos ?*/}
                     <AvatarContainerStyle>
                         <AvatarStyle src={logo} alt="avatar utilisateur" />
-                        <ModificationButtonStyle>
+                        {/* <ModificationButtonStyle>
                             changer la photo
-                        </ModificationButtonStyle>
+                        </ModificationButtonStyle> */}
                     </AvatarContainerStyle>
                     <TextInfosContainerStyle>
-                        {/* Container à transformer en form ou vers un form au clic ? */}
                         <H3InfosUserStyled>
-                            {user.firstname} {user.lastname}
+                            {firstname} {lastname}
                         </H3InfosUserStyled>
-                        {/* <value={user.lastname} /> */}
-                        <H3InfosUserStyled>{user.email}</H3InfosUserStyled>
-                        <H3InfosUserStyled>{user.password}</H3InfosUserStyled>
-                        <ModificationButtonStyle>
+                        <H3InfosUserStyled>{email}</H3InfosUserStyled>
+                        <ModificationButtonStyle to="/profile/update">
                             Modifier mes informations
                         </ModificationButtonStyle>
                     </TextInfosContainerStyle>
                 </InfoWrapper>
             </Wrapper>
-            <BackButtonStyle to="/home">Retour à l'acceuil</BackButtonStyle>
+            <BackToHomeButton />
         </Container>
     )
 }
@@ -107,30 +120,14 @@ const TextInfosContainerStyle = styled.div`
     align-items: center;
 `
 
-const ModificationButtonStyle = styled.button`
+const ModificationButtonStyle = styled(Link)`
+    text-decoration: none;
     margin-bottom: 15px;
     margin-top: 10px;
     border: 1px solid ${colors.primary};
     background-color: white;
     color: ${colors.primary};
     cursor: pointer;
-`
-
-const BackButtonStyle = styled(Link)`
-    text-decoration: none;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 25px;
-    padding: 3px;
-    border: 1px solid ${colors.primary};
-    // background-color: ${colors.secondary};
-    color: dark;
-    border-radius: 2%;
-    :hover {
-        cursor: pointer;
-        box-shadow: 0px 0px 1px 1px ${colors.primary};
-    }
 `
 
 const H3InfosUserStyled = styled.h3`

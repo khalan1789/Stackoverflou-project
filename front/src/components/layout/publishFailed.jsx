@@ -1,11 +1,11 @@
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 
-export default function InvalidateLoginAction() {
+export default function PublishFailedAction() {
     return (
         <SmallInputAlert>
-            Saisie de l'email ou du mot de passe incorrecte. Veuillez revoir
-            votre saisie.
+            Une erreur est survenue lors de la publication de l'article.
+            Veuillez essayer de nouveau.
         </SmallInputAlert>
     )
 }

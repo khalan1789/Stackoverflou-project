@@ -10,6 +10,8 @@ import { CreateTopic } from "./pages/createTopic"
 import { RequireAuth } from "./components/requireAuth"
 import styled from "styled-components"
 import colors from "./utils/style/colors"
+import { Error404 } from "./pages/error"
+import { UpdateProfile } from "./pages/updateProfile"
 
 function App() {
     return (
@@ -44,8 +46,16 @@ function App() {
                     <Route
                         path="/profile"
                         element={
-                            <RequireAuth withAuth={false}>
+                            <RequireAuth withAuth={true}>
                                 <Profile />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/profile/update"
+                        element={
+                            <RequireAuth withAuth={true}>
+                                <UpdateProfile />
                             </RequireAuth>
                         }
                     />
@@ -62,6 +72,14 @@ function App() {
                         element={
                             <RequireAuth withAuth={true}>
                                 <CreateTopic />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="*"
+                        element={
+                            <RequireAuth withAuth={false}>
+                                <Error404 />
                             </RequireAuth>
                         }
                     />
