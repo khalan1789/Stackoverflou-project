@@ -6,6 +6,8 @@ import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { useState } from "react"
 import BackToHomeButton from "../components/buttons/backToHomeButton"
+import { ToUpdateProfileButton } from "../components/buttons/toUpdateProfileButton"
+import Loading from "../components/loading"
 
 export function Profile() {
     // check user infos from redux
@@ -17,15 +19,22 @@ export function Profile() {
     const [firstname, setFirstname] = useState("")
     const [email, setEmail] = useState("")
 
+    // prepare state for loader
+    const [isLoading, setIsLoading] = useState(false)
+
     useEffect(() => {
         if (user !== null) {
+            setIsLoading(true)
             setNickname(user.nickname)
             setLastname(user.lastname)
             setFirstname(user.firstname)
             setEmail(user.email)
+            setIsLoading(false)
         }
     }, [user])
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <Container>
             <Wrapper>
                 <PseudoStyle>{nickname}</PseudoStyle>
@@ -42,9 +51,10 @@ export function Profile() {
                             {firstname} {lastname}
                         </H3InfosUserStyled>
                         <H3InfosUserStyled>{email}</H3InfosUserStyled>
-                        <ModificationButtonStyle to="/profile/update">
-                            Modifier mes informations
-                        </ModificationButtonStyle>
+                        <ToUpdateProfileButton
+                            link={"/profile/update"}
+                            text={"Modifier mes informations"}
+                        ></ToUpdateProfileButton>
                     </TextInfosContainerStyle>
                 </InfoWrapper>
             </Wrapper>
@@ -120,15 +130,15 @@ const TextInfosContainerStyle = styled.div`
     align-items: center;
 `
 
-const ModificationButtonStyle = styled(Link)`
-    text-decoration: none;
-    margin-bottom: 15px;
-    margin-top: 10px;
-    border: 1px solid ${colors.primary};
-    background-color: white;
-    color: ${colors.primary};
-    cursor: pointer;
-`
+// const ModificationButtonStyle = styled(Link)`
+//     text-decoration: none;
+//     margin-bottom: 15px;
+//     margin-top: 10px;
+//     border: 1px solid ${colors.primary};
+//     background-color: white;
+//     color: ${colors.primary};
+//     cursor: pointer;
+// `
 
 const H3InfosUserStyled = styled.h3`
     color: ${colors.primary};

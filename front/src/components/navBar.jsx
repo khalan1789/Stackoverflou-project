@@ -56,6 +56,10 @@ const NavStyle = styled.nav`
         padding: 10px;
         flex-direction: row;
     }
+    @media all and (min-width: 2450px) {
+        padding-left: 13%;
+        padding-right: 13%;
+    }
 `
 const LogoImgStyled = styled.img`
     height: 30px;

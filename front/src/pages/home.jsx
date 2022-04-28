@@ -4,34 +4,44 @@ import { useEffect, useState } from "react"
 import { getAllTopic } from "../api/topicApi"
 import { ResumeTopic } from "../components/layout/resumeTopic"
 import { Link } from "react-router-dom"
+import Loading from "../components/loading"
 
 export function Home() {
     const [topics, setTopics] = useState([])
+
+    // prepare state for loader
+    const [isLoading, setIsLoading] = useState(false)
+
     useEffect(() => {
+        setIsLoading(true)
         getAllTopic()
             .then((data) => setTopics(data.topics))
             .catch((error) => console.log(error))
+        setIsLoading(false)
     }, [])
 
     return (
         <HomeContainer>
             <MainTitleStyled>Bienvenue sur stackoverflou </MainTitleStyled>
             <H3TitleStyled>L'endroit où l'on voit plus net après</H3TitleStyled>
-
             <PublishLink to="/createTopic">Publier un article</PublishLink>
-            <TopicsContainer>
-                {topics.map(({ title, description, creationDate, _id }) => {
-                    return (
-                        <ResumeTopic
-                            title={title}
-                            date={creationDate}
-                            description={description}
-                            key={`${title}-${_id}`}
-                            id={_id}
-                        />
-                    )
-                })}
-            </TopicsContainer>
+            {isLoading ? (
+                <Loading />
+            ) : (
+                <TopicsContainer>
+                    {topics.map(({ title, description, creationDate, _id }) => {
+                        return (
+                            <ResumeTopic
+                                title={title}
+                                date={creationDate}
+                                description={description}
+                                key={`${title}-${_id}`}
+                                id={_id}
+                            />
+                        )
+                    })}
+                </TopicsContainer>
+            )}
         </HomeContainer>
     )
 }

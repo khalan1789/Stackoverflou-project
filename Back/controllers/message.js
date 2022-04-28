@@ -1,4 +1,5 @@
 const Message = require("../models/message");
+const User = require("../models/user");
 
 // get all
 exports.getAllMessage = (req, res, next) => {
@@ -52,4 +53,28 @@ exports.deleteOneMessage = (req, res) => {
             res.status(201).json({ message: " comment deleted with success !" })
         )
         .catch((error) => res.status(400).json({ error }));
+};
+
+// all messages from one topic
+
+exports.getAllTopicMessage = async (req, res) => {
+    const topic_id = req.params.id;
+    const messages = await Message.find({ topic_id: topic_id });
+
+    // // search nickname author
+    // const comments = await Message.find({ topic_id: topic_id });
+    // const topicAuthor = comments.map((user_id) => {
+    //     User.findById(user_id)
+    //     .then(
+    //         if(!User){
+    //             return nickname = "ancien utilisatuer"
+    //         }else{
+    //             return nickname
+    //         }
+    //     )
+    //     .catch(err => )
+    // })
+    console.log("id author : " + Message.user_id);
+    console.log("comment finds ? : " + messages);
+    res.status(200).json({ messages });
 };

@@ -46,7 +46,8 @@ export function UpdateProfileForm({
             .then((res) => {
                 //it's ok we update redux state
                 dispatch(updateReduxUserInfos(res.data))
-                navigate("/profile") //problème ici au use navigate
+                alert("modification du profil enregistrée")
+                navigate("/profile") //ici ça mets pas super à jour je trouve
             })
             .catch((error) => console.log(error))
     }

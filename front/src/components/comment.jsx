@@ -15,7 +15,8 @@ export function Comment({ content, date, nickname, id, user_id }) {
             .then((res) => {
                 //check the status returned to inform user if it's good or not
                 if (res.status !== 201) {
-                    return alert("commentaire supprimé avec succès !")
+                    alert("commentaire supprimé avec succès !")
+                    return window.location.reload()
                 } else {
                     console.log("type of status returned : " + res.status)
                 }
@@ -33,6 +34,7 @@ export function Comment({ content, date, nickname, id, user_id }) {
                     text={"supprimer le commentaire"}
                     action={() => deleteThisComment(id)}
                 />
+                //prévoir le bouton modifier aussi!
             )}
         </CommentContainer>
     )
@@ -46,9 +48,12 @@ const CommentContainer = styled.div`
     display: flex;
     flex-direction: column;
     // min-height: 150px;
-    width: 90%;
+    width: 100%;
     margin-bottom: 15px;
     // box-shadow: 0px 0px 2px 1px ${colors.primary};
+    // @media all and (min-width: 960px) {
+    //     width: 80%;
+    // }
 `
 const H3Style = styled.h4`
     line-height: 0.7rem;

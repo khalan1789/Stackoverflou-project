@@ -35,22 +35,6 @@ export function UpdateProfile() {
                 userFirstname={firstname}
                 userId={userId}
             />
-            {/* <form>
-                <div>
-                    <label>Pseudo</label>
-                    <input></input>
-                </div>
-                <div>
-                    <label>Nom</label>
-                    <input></input>
-                </div>
-                <div>
-                    <label>Prénom</label>
-                    <input></input>
-                </div>
-                <button>enregistrer</button>
-            </form> */}
-            {/* <button>Modifier le mot de passe</button> */}
         </Container>
     )
 }

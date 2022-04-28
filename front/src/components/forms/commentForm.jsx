@@ -3,7 +3,6 @@ import styled from "styled-components"
 import { createComment } from "../../api/commentApi"
 import colors from "../../utils/style/colors"
 import { CommentTopicButton } from "../buttons/commentFormButton"
-import { getOneTopic } from "../../api/topicApi"
 
 export function SendCommentForm({ user_id, topic_id }) {
     const [comment, setComment] = useState()
@@ -18,7 +17,7 @@ export function SendCommentForm({ user_id, topic_id }) {
         createComment(data)
         setComment("")
         alert("commentaire posté !")
-        // window.location.reload(false)
+        window.location.reload(true)
     }
 
     return (
@@ -49,7 +48,7 @@ const CommentContainer = styled.div`
     display: flex;
     flex-direction: column;
     min-height: 150px;
-    width: 90%;
+    width: 100%;
 `
 const Form = styled.form`
     display: flex;

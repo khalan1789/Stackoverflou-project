@@ -10,6 +10,7 @@ import { getAllComments } from "../api/commentApi"
 import { Comment } from "../components/comment"
 import CancelButton from "../components/buttons/cancelButton"
 import DeleteTopicButton from "../components/buttons/deleteTopicButton"
+import Loading from "../components/loading"
 // reload
 // import { logInUser } from "../store/reducers/userReducer" /** à voir si ça peut être une soluce au reload */
 
@@ -20,25 +21,33 @@ export function Topic() {
 
     // topic gestion
     // const [userLoggedId, setUserLoggedId] = useState(null)
-    const userId = useSelector((state) => state.user.infos.userId)
+    // const userId = useSelector((state) => state.user.infos.userId)
     const user = useSelector((state) => state.user.infos)
     // prepare states for the topic
     const [topic, setTopic] = useState({})
     const [topicDate, setTopicDate] = useState()
-    // const [topicDescription, setTopicDescription] = useState('')
-    // const [topicTitle, setTopicTitle] = useState("")
-    // const [topicAuthor, setTopicAuthor] = useState("")
+    const [topicDescription, setTopicDescription] = useState("")
+    const [topicTitle, setTopicTitle] = useState("")
+    const [topicAuthorId, setTopicAuthorId] = useState("")
+    const [topicId, setTopicId] = useState("")
 
     // prepare states for comments
     const [comments, setComments] = useState([])
 
+    // prepare state for loader
+    const [isLoading, setIsLoading] = useState(false)
+
     // call api using id
     useEffect(() => {
         if (user !== null) {
+            setIsLoading(true)
             getOneTopic(id)
                 .then((topicInfos) => {
                     setTopic(topicInfos)
-
+                    setTopicDescription(topicInfos.description)
+                    setTopicTitle(topicInfos.title)
+                    setTopicAuthorId(topicInfos.user_id)
+                    setTopicId(topicInfos._id)
                     // transforming date
                     setTopicDate(editDate(topicInfos.creationDate))
                 })
@@ -47,25 +56,11 @@ export function Topic() {
             getAllComments(id)
                 .then((res) => setComments(res.messages))
                 .catch((error) => console.log("erreur > " + error))
+
+            setIsLoading(false)
         }
-        // getOneTopic(id)
-        //     .then((topicInfos) => {
-        //         setTopic(topicInfos)
-
-        //         // transforming date
-        //         setTopicDate(editDate(topicInfos.creationDate))
-        //     })
-        //     .catch((error) => console.log("erreur > " + error))
-
-        // getAllComments(id)
-        //     .then((res) => setComments(res.messages))
-        //     .catch((error) => console.log("erreur > " + error))
     }, [id, user])
 
-    // topic gestion
-    // const [userLoggedId, setUserLoggedId] = useState(null)
-    // const userId = useSelector((state) => state.user.infos.userId)
-    // setUserLoggedId(userId)
     const navigate = useNavigate()
 
     const removeTopic = (topicId) => {
@@ -78,46 +73,53 @@ export function Topic() {
             .catch((error) => console.log(error))
     }
 
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <PageTopicContainer>
             <CancelButton link={"/home"} />
             <TopicContainer>
                 <TopicHeaderContainer>
-                    <TopicTitleStyle>{topic.title}</TopicTitleStyle>
+                    <TopicTitleStyle>{topicTitle}</TopicTitleStyle>
                     <PublisherInfosContainer>
                         <p>Posté le : {topicDate}</p>
-                        <p>Par : {topic._id}</p>
+                        <p>Par : {topicAuthorId}</p>
                     </PublisherInfosContainer>
                 </TopicHeaderContainer>
                 <DescriptionParagraphStyle>
-                    {topic.description}
+                    {topicDescription}
                 </DescriptionParagraphStyle>
 
-                {userId && topic.user_id === userId && (
-                    <DeleteTopicButton
-                        action={() => removeTopic(topic._id)}
-                        text={"Supprimer l'article"}
-                    ></DeleteTopicButton>
-                )}
+                {user !== null &&
+                    user.userId &&
+                    topicAuthorId === user.userId && (
+                        <DeleteTopicButton
+                            action={() => removeTopic(topic._id)}
+                            text={"Supprimer l'article"}
+                        ></DeleteTopicButton>
+                    )}
 
                 {/* à voir si on met la gestion de pj */}
             </TopicContainer>
+            <CommentsContainer>
+                <h4>Commentaires</h4>
+                {comments.map(({ content, _id, creationDate, user_id }) => {
+                    return (
+                        // <p key={id}>contient : {content}</p>
+                        <Comment
+                            content={content}
+                            date={creationDate}
+                            id={_id}
+                            user_id={user_id}
+                            key={`${creationDate}+ ${user_id}`}
+                        />
+                    )
+                })}
 
-            <h4>Commentaires</h4>
-            {comments.map(({ content, _id, creationDate, user_id }) => {
-                return (
-                    // <p key={id}>contient : {content}</p>
-                    <Comment
-                        content={content}
-                        date={creationDate}
-                        id={_id}
-                        user_id={user_id}
-                        key={`${creationDate}+ ${user_id}`}
-                    />
-                )
-            })}
-
-            <SendCommentForm user_id={userId} topic_id={topic._id} />
+                {user !== null && (
+                    <SendCommentForm user_id={user.userId} topic_id={topicId} />
+                )}
+            </CommentsContainer>
         </PageTopicContainer>
     )
 }
@@ -144,6 +146,9 @@ const TopicContainer = styled.div`
     margin-top: 30px;
     width: 90%;
     max-width: 1200px;
+    @media all and (min-width: 900px) {
+        width: 80%;
+    }
 `
 const TopicHeaderContainer = styled.div`
     display: flex;
@@ -175,8 +180,14 @@ const PublisherInfosContainer = styled.div`
 const DescriptionParagraphStyle = styled.p`
     padding: 0.5rem;
 `
-//if the page is reload or changing   **/ ici je teste **/
-// const dispatch = useDispatch
-// useEffect(() => {
-//     dispatch(logInUser(res.data.userInfos))
-// })
+
+const CommentsContainer = styled.div`
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 90%;
+    max-width: 1200px;
+    @media all and (min-width: 900px) {
+        width: 80%;
+    }
+`

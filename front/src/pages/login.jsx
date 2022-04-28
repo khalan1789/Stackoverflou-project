@@ -3,9 +3,8 @@ import colors from "../utils/style/colors"
 import logo from "../assets/livre_ouvert_violet.svg"
 import { Link } from "react-router-dom"
 import { useState } from "react"
-import { logUser } from "../api/api"
+import { logUser } from "../api/userApi"
 import { useNavigate } from "react-router-dom"
-// import { useDispatch, useSelector } from "react-redux"
 import { LogFormButton } from "../components/buttons/logFormButton"
 import { validateLogInFiedls } from "../utils/helper/regexp"
 import InvalidateLoginAction from "../components/layout/invalidateLoginAction"
@@ -36,32 +35,21 @@ export function LogIn() {
         if (validateLogInFiedls(email, password)) {
             setIsDisabled(false)
             setInvalidateInputs(false)
+
             // log to the api with data entries
             logUser(data)
                 .then((response) => {
-                    console.log(
-                        "réponse : " + response
-                    ) /* /////CONSOLE LOG\\\\\\\ */
-                    console.log(
-                        "token : " + response.data.token
-                    ) /* /////CONSOLE LOG\\\\\\\ */
-                    console.log(
-                        "status : " + response.status
-                    ) /* /////CONSOLE LOG\\\\\\\ */
+                    // it's a good user
                     if (response.status === 202) {
-                        // localStorage.setItem("user", JSON.stringify(res.data)) => on va gérer avec le HOC maintenant
-                        console.log(
-                            "token dans le if : " + response.data.token
-                        ) /* /////CONSOLE LOG\\\\\\\ */
+                        // email and password are ok, we will use the token returned from back and log the user
                         localStorage.setItem(
                             "stack-overflou-token",
                             JSON.stringify(response.data.token)
                         )
-                        console.log(
-                            "status dans le if : " + response.status
-                        ) /* /////CONSOLE LOG\\\\\\\ */
                         return navigate("/home")
-                    } else {
+                    }
+                    // informations sent are not good
+                    else {
                         console.log("erreur status est : " + response.status)
                         alert(" erreur email ou mot de passe incorrect !")
                         emailInput.value = ""
