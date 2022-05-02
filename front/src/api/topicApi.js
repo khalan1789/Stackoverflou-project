@@ -37,7 +37,7 @@ export function getOneTopic(id) {
         .then((response) => {
             return response.data.topic
         })
-        .catch(console.log("errer getone topic"))
+        .catch((error) => console.log("errer getone topic", error))
 }
 
 export function deleteTopic(id) {
@@ -50,4 +50,16 @@ export function deleteTopic(id) {
             return response.status
         })
         .catch((error) => console.log("erreur delete : " + error))
+}
+
+export function updateTopic(id, data) {
+    const url = `/topic/${id}`
+    const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
+
+    return instance
+        .put(url, data, { headers: { authorization: token } })
+        .then((response) => {
+            return response
+        })
+        .catch((error) => console.log(error))
 }

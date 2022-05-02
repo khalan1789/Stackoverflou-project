@@ -4,6 +4,7 @@ import { deleteComment } from "../api/commentApi"
 import editDate from "../utils/helper/editDate"
 import colors from "../utils/style/colors"
 import DeleteCommentButton from "./buttons/deleteCommentButton"
+import { ToUpdateCommentButton } from "./buttons/toUpdateCommentButton"
 
 export function Comment({ content, date, nickname, id, user_id }) {
     const editedDate = editDate(date)
@@ -30,11 +31,16 @@ export function Comment({ content, date, nickname, id, user_id }) {
                 {nickname} le {editedDate}
             </ParagraphStyle>
             {userId === user_id && (
-                <DeleteCommentButton
-                    text={"supprimer le commentaire"}
-                    action={() => deleteThisComment(id)}
-                />
-                //prévoir le bouton modifier aussi!
+                <>
+                    <ToUpdateCommentButton
+                        text={"modifier"}
+                        link={`/comment/update/?id=${id}`}
+                    />
+                    <DeleteCommentButton
+                        text={"supprimer le commentaire"}
+                        action={() => deleteThisComment(id)}
+                    />
+                </>
             )}
         </CommentContainer>
     )
@@ -62,4 +68,5 @@ const H3Style = styled.h4`
 
 const ParagraphStyle = styled.p`
     text-align: end;
+    font-style: italic;
 `

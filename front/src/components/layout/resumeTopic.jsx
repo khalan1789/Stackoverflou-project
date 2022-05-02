@@ -3,7 +3,7 @@ import styled from "styled-components"
 import colors from "../../utils/style/colors"
 import editDate from "../../utils/helper/editDate"
 
-export function ResumeTopic({ title, date, id }) {
+export function ResumeTopic({ title, date, id, author }) {
     // const [initialDate, setInitialDate] = useState()
     // setInitialDate(date)
     const editedDate = editDate(date)
@@ -18,13 +18,14 @@ export function ResumeTopic({ title, date, id }) {
             <TopicHeaderContainer>
                 <TopicTitleStyle>{title} </TopicTitleStyle>
                 <PublisherInfosContainer>
-                    <p>Pseudo</p>
-                    <p>{editedDate} </p>
-                    {/* <small>{initialDate}</small> */}
+                    <PublisherParagraph>
+                        Posté par{" "}
+                        <PublisherAuthorSpan>{author}</PublisherAuthorSpan>
+                    </PublisherParagraph>
+                    <PublisherParagraph>{editedDate} </PublisherParagraph>
                 </PublisherInfosContainer>
             </TopicHeaderContainer>
             <LinkStyle to={"/topic/?id=" + id}>Voir l'article</LinkStyle>
-            {/* à voir si on met la gestion de pj */}
         </TopicContainer>
     )
 }
@@ -57,6 +58,7 @@ const TopicTitleStyle = styled.h3`
     min-height: 50%;
     margin-left: 10px;
     margin-right: 5px;
+    // padding-left: 20px;
     // text-align: center;
     // justify-content: center;
     // margin-left: 5px;
@@ -66,6 +68,7 @@ const TopicTitleStyle = styled.h3`
     @media all and (min-width: 650px) {
         width: 100%;
         align-self: center;
+        padding-left: 20px;
     }
 `
 const PublisherInfosContainer = styled.div`
@@ -76,6 +79,12 @@ const PublisherInfosContainer = styled.div`
     @media all and (min-width: 650px) {
         border-bottom: 0px;
     } ;
+`
+const PublisherParagraph = styled.p`
+    font-style: italic;
+`
+const PublisherAuthorSpan = styled.span`
+    font-weight: 600;
 `
 const LinkStyle = styled(Link)`
     text-align: center;

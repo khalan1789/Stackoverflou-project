@@ -6,13 +6,16 @@ export default function DeleteTopicButton({ text, action }) {
 }
 
 const DeleteButton = styled.button`
-    background-color: ${colors.backgroundLight};
+    background-color: ${colors.backgroundBase};
     border: 1px solid ${colors.backgroundLight};
+    width: 98%;
     // box-shadow: 0px 0px 1px 0px ${colors.primary};
     // border-radius: 5px;
-    // align-self: end;
+    margin-bottom: 5px;
+    align-self: center;
     :hover {
         cursor: pointer;
         color: ${colors.danger};
+        background-color: ${colors.secondary};
     }
 `

@@ -1,4 +1,5 @@
 import { useState } from "react"
+import { useNavigate } from "react-router-dom"
 import styled from "styled-components"
 import { createComment } from "../../api/commentApi"
 import colors from "../../utils/style/colors"
@@ -6,7 +7,7 @@ import { CommentTopicButton } from "../buttons/commentFormButton"
 
 export function SendCommentForm({ user_id, topic_id }) {
     const [comment, setComment] = useState()
-
+    const navigate = useNavigate()
     const data = {
         content: comment,
         topic_id,
@@ -16,6 +17,7 @@ export function SendCommentForm({ user_id, topic_id }) {
         e.preventDefault()
         createComment(data)
         setComment("")
+        navigate(`/topic?id=${topic_id}`)
         alert("commentaire posté !")
         window.location.reload(true)
     }

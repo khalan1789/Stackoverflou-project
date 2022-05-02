@@ -11,6 +11,8 @@ import { Comment } from "../components/comment"
 import CancelButton from "../components/buttons/cancelButton"
 import DeleteTopicButton from "../components/buttons/deleteTopicButton"
 import Loading from "../components/loading"
+import UpdateTopicButton from "../components/buttons/updateTopicButton"
+
 // reload
 // import { logInUser } from "../store/reducers/userReducer" /** à voir si ça peut être une soluce au reload */
 
@@ -20,16 +22,16 @@ export function Topic() {
     const id = params.get("id")
 
     // topic gestion
-    // const [userLoggedId, setUserLoggedId] = useState(null)
-    // const userId = useSelector((state) => state.user.infos.userId)
+    // redux user state
     const user = useSelector((state) => state.user.infos)
+
     // prepare states for the topic
-    const [topic, setTopic] = useState({})
     const [topicDate, setTopicDate] = useState()
     const [topicDescription, setTopicDescription] = useState("")
     const [topicTitle, setTopicTitle] = useState("")
     const [topicAuthorId, setTopicAuthorId] = useState("")
     const [topicId, setTopicId] = useState("")
+    const [topicAuthor, setTopicAuthor] = useState("")
 
     // prepare states for comments
     const [comments, setComments] = useState([])
@@ -43,11 +45,11 @@ export function Topic() {
             setIsLoading(true)
             getOneTopic(id)
                 .then((topicInfos) => {
-                    setTopic(topicInfos)
                     setTopicDescription(topicInfos.description)
                     setTopicTitle(topicInfos.title)
                     setTopicAuthorId(topicInfos.user_id)
                     setTopicId(topicInfos._id)
+                    setTopicAuthor(topicInfos.nickname)
                     // transforming date
                     setTopicDate(editDate(topicInfos.creationDate))
                 })
@@ -82,39 +84,61 @@ export function Topic() {
                 <TopicHeaderContainer>
                     <TopicTitleStyle>{topicTitle}</TopicTitleStyle>
                     <PublisherInfosContainer>
-                        <p>Posté le : {topicDate}</p>
-                        <p>Par : {topicAuthorId}</p>
+                        <p>
+                            Par :
+                            <PublisherAuthorSpan>
+                                {topicAuthor}
+                            </PublisherAuthorSpan>
+                        </p>
+                        <p>Posté le {topicDate}</p>
                     </PublisherInfosContainer>
                 </TopicHeaderContainer>
                 <DescriptionParagraphStyle>
                     {topicDescription}
                 </DescriptionParagraphStyle>
 
-                {user !== null &&
-                    user.userId &&
-                    topicAuthorId === user.userId && (
+                {user !== null && user.userId && topicAuthorId === user.userId && (
+                    <>
+                        <UpdateTopicButton
+                            text={"Modifier l'article"}
+                            action={() =>
+                                navigate(`/topic/update/?id=${topicId}`)
+                            }
+                        ></UpdateTopicButton>
                         <DeleteTopicButton
-                            action={() => removeTopic(topic._id)}
+                            action={() => removeTopic(topicId)}
                             text={"Supprimer l'article"}
                         ></DeleteTopicButton>
-                    )}
+                    </>
+                )}
 
                 {/* à voir si on met la gestion de pj */}
             </TopicContainer>
             <CommentsContainer>
                 <h4>Commentaires</h4>
-                {comments.map(({ content, _id, creationDate, user_id }) => {
-                    return (
-                        // <p key={id}>contient : {content}</p>
-                        <Comment
-                            content={content}
-                            date={creationDate}
-                            id={_id}
-                            user_id={user_id}
-                            key={`${creationDate}+ ${user_id}`}
-                        />
-                    )
-                })}
+                {comments.map(
+                    ({
+                        content,
+                        _id,
+                        creationDate,
+                        user_id,
+                        nickname,
+                        topic_id,
+                    }) => {
+                        return (
+                            // <p key={id}>contient : {content}</p>
+                            <Comment
+                                content={content}
+                                date={creationDate}
+                                id={_id}
+                                user_id={user_id}
+                                key={`${creationDate}+ ${user_id}`}
+                                nickname={nickname}
+                                topic_id={topic_id}
+                            />
+                        )
+                    }
+                )}
 
                 {user !== null && (
                     <SendCommentForm user_id={user.userId} topic_id={topicId} />
@@ -139,7 +163,6 @@ const TopicContainer = styled.div`
     display: flex;
     justify-content: center;
     align-self: top;
-    // align-items: center;
     flex-direction: column;
     border: 1px solid ${colors.primary};
     box-shadow: 0px 0px 1px 1px;
@@ -158,14 +181,13 @@ const TopicHeaderContainer = styled.div`
     box-shadow: 0px 2px 0px 0px ${colors.primary};
     @media all and (min-width: 650px) {
         flex-direction: column;
-    } ;
+    }
 `
 
 const TopicTitleStyle = styled.h3`
     font-style: italic;
-    border: solid 1px black;
-    min-height: 50%;
     text-align: center;
+    margin-top: 10px;
 `
 const PublisherInfosContainer = styled.div`
     display: flex;
@@ -176,6 +198,10 @@ const PublisherInfosContainer = styled.div`
         border-bottom: 0px;
         // flex-direction: column;
     } ;
+`
+const PublisherAuthorSpan = styled.span`
+    font-weight: 600;
+    margin-left: 5px;
 `
 const DescriptionParagraphStyle = styled.p`
     padding: 0.5rem;

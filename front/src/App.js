@@ -12,6 +12,8 @@ import styled from "styled-components"
 import colors from "./utils/style/colors"
 import { Error404 } from "./pages/error"
 import { UpdateProfile } from "./pages/updateProfile"
+import { UpdateTopic } from "./pages/updateTopic"
+import { UpdateComment } from "./pages/updateComment"
 
 function App() {
     return (
@@ -72,6 +74,22 @@ function App() {
                         element={
                             <RequireAuth withAuth={true}>
                                 <CreateTopic />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/topic/update"
+                        element={
+                            <RequireAuth withAuth={true}>
+                                <UpdateTopic />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/comment/update"
+                        element={
+                            <RequireAuth withAuth={true}>
+                                <UpdateComment />
                             </RequireAuth>
                         }
                     />

@@ -44,4 +44,27 @@ export function deleteComment(id) {
         })
         .catch((error) => console.log(error))
 }
-// update topic
+
+// get one comment
+export function GetOneComment(id) {
+    const url = `/message/${id}`
+    const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
+    return instance
+        .get(url, { headers: { authorization: token } })
+        .then((response) => {
+            return response.data.comment
+        })
+        .catch((error) => console.log(error))
+}
+
+// update comment
+export function UpdateOneComment(id, data) {
+    const url = `/message/${id}`
+    const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
+    return instance
+        .put(url, data, { headers: { authorization: token } })
+        .then((response) => {
+            return response
+        })
+        .catch((error) => console.log(error))
+}

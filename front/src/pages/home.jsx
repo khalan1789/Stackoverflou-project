@@ -29,17 +29,26 @@ export function Home() {
                 <Loading />
             ) : (
                 <TopicsContainer>
-                    {topics.map(({ title, description, creationDate, _id }) => {
-                        return (
-                            <ResumeTopic
-                                title={title}
-                                date={creationDate}
-                                description={description}
-                                key={`${title}-${_id}`}
-                                id={_id}
-                            />
-                        )
-                    })}
+                    {topics.map(
+                        ({
+                            title,
+                            description,
+                            creationDate,
+                            _id,
+                            nickname,
+                        }) => {
+                            return (
+                                <ResumeTopic
+                                    title={title}
+                                    date={creationDate}
+                                    description={description}
+                                    key={`${title}-${_id}`}
+                                    id={_id}
+                                    author={nickname}
+                                />
+                            )
+                        }
+                    )}
                 </TopicsContainer>
             )}
         </HomeContainer>
