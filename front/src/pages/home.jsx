@@ -15,9 +15,9 @@ export function Home() {
     useEffect(() => {
         setIsLoading(true)
         getAllTopic()
-            .then((data) => setTopics(data.topics))
+            .then((data) => setTopics(data.topics), setIsLoading(false))
             .catch((error) => console.log(error))
-        setIsLoading(false)
+        // setIsLoading(false)
     }, [])
 
     return (

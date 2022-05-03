@@ -8,6 +8,7 @@ import PublishFailedAction from "../components/layout/publishFailed"
 import { getOneTopic } from "../api/topicApi"
 import colors from "../utils/style/colors"
 import CancelButton from "../components/buttons/cancelButton"
+import Loading from "../components/loading"
 
 export function UpdateTopic() {
     const navigate = useNavigate()
@@ -21,14 +22,17 @@ export function UpdateTopic() {
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
     const user = useSelector((state) => state.user.infos)
+    const [isLoading, setIsLoading] = useState(false)
 
     // on downloading we update states with topic infos
     useEffect(() => {
         if (user !== null) {
+            setIsLoading(true)
             getOneTopic(id)
                 .then((topic) => {
                     setTitle(topic.title)
                     setDescription(topic.description)
+                    setIsLoading(false)
                 })
                 .catch((error) => console.log(error))
         }
@@ -62,7 +66,9 @@ export function UpdateTopic() {
             .catch((err) => console.log(err))
     }
 
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <FormContainerStyle>
             <HeaderStyle>
                 <CancelButton link={`/topic/?id=${id}`}>X</CancelButton>

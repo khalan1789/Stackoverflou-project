@@ -6,6 +6,7 @@ import { CommentTopicButton } from "../components/buttons/commentFormButton"
 import { CancelCommentFormUpdateButton } from "../components/buttons/CancelCommentFormUpdateButton"
 import colors from "../utils/style/colors"
 import { useSelector } from "react-redux"
+import Loading from "../components/loading"
 
 export function UpdateComment({ user_id, topic_id }) {
     const navigate = useNavigate()
@@ -18,13 +19,16 @@ export function UpdateComment({ user_id, topic_id }) {
     const [comment, setComment] = useState("")
     const [topicId, setTopicId] = useState("")
     const user = useSelector((state) => state.user.infos)
+    const [isLoading, setIsLoading] = useState(false)
 
     useEffect(() => {
         if (user !== null) {
+            setIsLoading(true)
             GetOneComment(id)
                 .then((comment) => {
                     setComment(comment.content)
                     setTopicId(comment.topic_id)
+                    setIsLoading(false)
                 })
                 .catch()
         }
@@ -37,7 +41,7 @@ export function UpdateComment({ user_id, topic_id }) {
         }
         UpdateOneComment(id, data)
             .then((res) =>
-                res.status === 201 // arr^été ici avant de paritr
+                res.status === 201
                     ? (alert("commentaire modifié !"),
                       navigate(`/topic?id=${topicId}`))
                     : alert("aie le commentaire n'as pas pu être posté !")
@@ -47,27 +51,31 @@ export function UpdateComment({ user_id, topic_id }) {
 
     return (
         <UpdateCommentContainerView>
-            <CommentContainer>
-                <Form id="form-comment">
-                    <FormLabel htmlFor="form-comment">
-                        Un commentaire ?
-                    </FormLabel>
-                    <FormInput
-                        type="text"
-                        onChange={(e) => setComment(e.target.value)}
-                        value={comment}
-                        id="form-comment"
-                    />
-                    <CommentTopicButton
-                        action={sendComment}
-                        text={"Poster"}
-                    ></CommentTopicButton>
-                    <CancelCommentFormUpdateButton
-                        link={`/topic?id=${topicId}`}
-                        text={"Annuler"}
-                    ></CancelCommentFormUpdateButton>
-                </Form>
-            </CommentContainer>
+            {isLoading === true ? (
+                <Loading />
+            ) : (
+                <CommentContainer>
+                    <Form id="form-comment">
+                        <FormLabel htmlFor="form-comment">
+                            Un commentaire ?
+                        </FormLabel>
+                        <FormInput
+                            type="text"
+                            onChange={(e) => setComment(e.target.value)}
+                            value={comment}
+                            id="form-comment"
+                        />
+                        <CommentTopicButton
+                            action={sendComment}
+                            text={"Poster"}
+                        ></CommentTopicButton>
+                        <CancelCommentFormUpdateButton
+                            link={`/topic?id=${topicId}`}
+                            text={"Annuler"}
+                        ></CancelCommentFormUpdateButton>
+                    </Form>
+                </CommentContainer>
+            )}
         </UpdateCommentContainerView>
     )
 }

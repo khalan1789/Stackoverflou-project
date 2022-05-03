@@ -8,6 +8,7 @@ import { UpdateProfileButton } from "../buttons/updateProfileFormButton"
 import { CancelFormButton } from "../buttons/cancelFormButton"
 import { updateUserInfos } from "../../api/userApi"
 import { updateReduxUserInfos } from "../../store/reducers/userReducer"
+import Loading from "../loading"
 
 export function UpdateProfileForm({
     userNickname,
@@ -20,6 +21,7 @@ export function UpdateProfileForm({
     const [lastname, setLastname] = useState("")
     const [firstname, setFirstname] = useState("")
     const [id, setId] = useState("")
+    const [isLoading, setIsLoading] = useState(false)
 
     // to update state in redux
     const dispatch = useDispatch()
@@ -27,10 +29,12 @@ export function UpdateProfileForm({
     const navigate = useNavigate()
 
     useEffect(() => {
+        setIsLoading(true)
         setNickname(userNickname)
         setLastname(userLastname)
         setFirstname(userFirstname)
         setId(userId)
+        setIsLoading(false)
     }, [userNickname, userLastname, userFirstname, userId])
 
     // test return when inputs are changed */ to transform in send data */
@@ -50,9 +54,10 @@ export function UpdateProfileForm({
             })
             .catch((error) => console.log(error))
     }
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <FormContainer>
-            <h5>User id : {id}</h5>
             <FormInputContainer>
                 <LabelFormStyle htmlFor="nickname">Pseudo</LabelFormStyle>
                 <InputFormStyle
