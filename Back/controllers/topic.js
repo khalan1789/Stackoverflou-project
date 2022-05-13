@@ -1,5 +1,6 @@
 const Topic = require("../models/topic")
 const User = require("../models/user")
+const Message = require("../models/message")
 
 // create one
 exports.createOneTopic = (req, res) => {
@@ -100,8 +101,15 @@ exports.updateOneTopic = (req, res) => {
 
 // delete one
 exports.deleteOneTopic = (req, res) => {
-    const id = req.body.id
-    Topic.findByIdAndRemove({ _id: req.params.id })
-        .then(() => res.status(201).json({ message: " topic deleted !" }))
-        .catch((error) => res.status(400).json({ error }))
+    try {
+        // first we remove all messages from the topic
+        Message.deleteMany({ topic_id: req.params.id }).then(() => {
+            // and then we can delete the topic
+            Topic.findByIdAndRemove({ _id: req.params.id }).then(() => {
+                res.status(201).json({ message: " topic deleted !" })
+            })
+        })
+    } catch (error) {
+        res.status(400).json({ error })
+    }
 }
