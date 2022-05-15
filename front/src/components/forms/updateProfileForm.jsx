@@ -50,7 +50,8 @@ export function UpdateProfileForm({
                 //it's ok we update redux state
                 dispatch(updateReduxUserInfos(res.data))
                 alert("modification du profil enregistrée")
-                navigate("/profile") //ici ça mets pas super à jour je trouve
+                navigate("/profile")
+                window.location.reload()
             })
             .catch((error) => console.log(error))
     }

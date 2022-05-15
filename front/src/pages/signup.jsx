@@ -31,7 +31,6 @@ export function SignUp() {
             nickname,
         }
         console.log(data) /* /////CONSOLE LOG\\\\\\\ */
-
         if (
             validateCreateUserFields(
                 firstname,
@@ -41,14 +40,28 @@ export function SignUp() {
                 password
             )
         ) {
-            // call api with data
-            createUser(data)
-                // and use status to redirect on login if ok
-                .then((res) => {
-                    res.status === 201
-                        ? navigate("/login")
-                        : console.log(res.status + " en status")
-                })
+            try {
+                // call api with data
+                createUser(data)
+                    // and use status received to redirect on login if ok
+                    .then((response) => {
+                        if (response === 401) {
+                            alert("Utilisateur déjà existant !")
+                        } else if (response === 400) {
+                            alert(
+                                "Saisie incorrecte ! Chaque champs doit être d'au moins 2 charactères, le mot de passe en contenir au minimum 8"
+                            )
+                        } else if (response === 201) {
+                            alert(
+                                "Création de votre compte réussie ! Veuillez vous identifier à présent"
+                            )
+                            navigate("/login")
+                        }
+                    })
+                    .catch((error) => console.log(error))
+            } catch (error) {
+                console.log("erreur en force", error.request.status)
+            }
         } else {
             setInvalidateInputs(true)
             alert("Saisie incorrecte !")
@@ -97,7 +110,13 @@ export function SignUp() {
                         onChange={(e) => setPassword(e.target.value)}
                     ></FormInputStyle>
                 </FormInputContainerStyle>
-                {invalidateInputs ? <InvalidateSignupAction /> : ""}
+                {invalidateInputs && (
+                    <InvalidateSignupAction
+                        text={
+                            "Les champs ne sont pas correctement saisis, veuillez revoir votre saisie."
+                        }
+                    />
+                )}
                 <LogFormButton text={"Valider l'inscription"} />
             </FormStyle>
             <p>
@@ -146,7 +165,3 @@ const FormInputStyle = styled.input`
     height: 25px;
     padding: 1px;
 `
-
-// il faut un champ firstname / lastname / nickname / email / mdp
-// un lien de switch vers log in
-// un btn valider

@@ -6,28 +6,38 @@ const instance = axios.create({
     baseURL: "http://localhost:9000/api/",
 })
 
+// try whith dispatch here
 export function logUser(data) {
     // add login route to the url
     const loginUrl = "login"
 
     return instance
-        .post(loginUrl, data) // problème après pour la gestion de la réponse
+        .post(loginUrl, data)
         .then((response) => {
             return response
         })
-        .catch((error) => console.log("je passe au catch du api : " + error))
+        .catch((error) => console.log(error))
 }
 
 export function createUser(data) {
     // part of signup route
     const signupUrl = "signup"
-
+    let status
     return instance
         .post(signupUrl, data)
         .then((response) => {
-            return response
+            // if request is ok
+            console.log("response status :", response.status)
+
+            status = response.status
+            return status
         })
-        .catch((error) => console.log(error))
+        .catch((error) => {
+            // is request is not ok because the user is already existing
+            console.log("err status", error.request.status)
+            status = error.request.status
+            return status
+        })
 }
 
 export function getUserInfos(token) {
