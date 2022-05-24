@@ -69,3 +69,28 @@ export function updateUserInfos(id, data) {
         })
         .catch((error) => console.log(error))
 }
+
+// delete user
+
+export function deleteUser(id) {
+    const url = `/user/${id}`
+    const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
+
+    return instance
+        .delete(url, { headers: { authorization: token } })
+        .then((response) => {
+            return response.status
+        })
+        .catch((error) => console.log(error))
+}
+
+// export async function deleteUser(id) {
+//     const url = `/user/${id}`
+//     const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
+
+//     const deleteResponse = await instance.delete(url, {
+//         headers: { authorization: token },
+//     })
+//     console.log("del res > ", deleteResponse)
+//     return deleteResponse
+// }

@@ -69,7 +69,7 @@ export function Topic() {
         deleteTopic(topicId)
             .then((response) =>
                 response === 201
-                    ? navigate("/home")
+                    ? (window.alert("Article supprimé ! "), navigate("/home"))
                     : console.log(" problem with delete response : " + response)
             )
             .catch((error) => console.log(error))

@@ -6,8 +6,9 @@ import { useEffect } from "react"
 import { useState } from "react"
 import { UpdateProfileButton } from "../buttons/updateProfileFormButton"
 import { CancelFormButton } from "../buttons/cancelFormButton"
-import { updateUserInfos } from "../../api/userApi"
+import { deleteUser, updateUserInfos } from "../../api/userApi"
 import { updateReduxUserInfos } from "../../store/reducers/userReducer"
+import DeleteUserButton from "../buttons/deleteUserButton"
 import Loading from "../loading"
 
 export function UpdateProfileForm({
@@ -55,6 +56,34 @@ export function UpdateProfileForm({
             })
             .catch((error) => console.log(error))
     }
+
+    // delete user
+    const deleteThisUser = (id) => {
+        // ça bloque ici fuck sur le delete user....
+        if (
+            window.confirm(
+                "Vous allez supprimer votre compte et vos informations seront perdues, êtes vous sûr ?"
+            )
+        ) {
+            setIsLoading(true)
+            deleteUser(id)
+                .then((status) => {
+                    console.log("la resp delete", status)
+                    if (status === 200) {
+                        alert("votre compte a bien été supprimé")
+                        navigate("/login")
+                        setIsLoading(false)
+                    }
+                })
+                .catch(
+                    (error) =>
+                        alert(
+                            "un problème est survenu pour la suppression de votre compte"
+                        ),
+                    setIsLoading(false)
+                )
+        }
+    }
     return isLoading ? (
         <Loading />
     ) : (
@@ -91,6 +120,7 @@ export function UpdateProfileForm({
                 action={(e) => sendUserInfosUpdated(e)}
             ></UpdateProfileButton>
             <CancelFormButton link={"/profile"} text={"Annuler"} />
+            <DeleteUserButton action={() => deleteThisUser(id)} />
         </FormContainer>
     )
 }
@@ -102,6 +132,7 @@ const FormContainer = styled.form`
     flex-direction: column;
     border: 1px solid ${colors.primary};
     width: 80%;
+
     background-color: ${colors.btnLog};
     border: 2px solid ${colors.primary};
     // min-height: 50vh;
