@@ -7,6 +7,7 @@ import { logUser } from "../api/userApi"
 import { useNavigate } from "react-router-dom"
 import { LogFormButton } from "../components/buttons/logFormButton"
 import { validateLogInFiedls } from "../utils/helper/regexp"
+import Loading from "../components/loading"
 import InvalidateLoginAction from "../components/layout/invalidateLoginAction"
 
 // Logic / render side
@@ -16,13 +17,16 @@ export function LogIn() {
     const [password, setPassword] = useState("")
     const navigate = useNavigate()
 
+    // prepare state for loader
+    const [isLoading, setIsLoading] = useState(false)
+
     // to reset inputs after sending request
     const emailInput = document.getElementById("email")
     const passwordInput = document.getElementById("password")
 
     // on form validation
-    const [isDisabled, setIsDisabled] = useState(true)
     const [invalidateInputs, setInvalidateInputs] = useState(false)
+    const [errorMessage, setErrorMessage] = useState("")
     const handleSubmit = (e) => {
         e.preventDefault()
         console.log(email, password)
@@ -33,44 +37,47 @@ export function LogIn() {
 
         // check input entries
         if (validateLogInFiedls(email, password)) {
-            setIsDisabled(false)
             setInvalidateInputs(false)
-
+            setIsLoading(true)
             // log to the api with data entries
             logUser(data)
                 .then((response) => {
                     // it's a good user
-                    if (response.status === 202) {
+                    if (response.status === 200) {
                         // email and password are ok, we will use the token returned from back and log the user
                         localStorage.setItem(
                             "stack-overflou-token",
                             JSON.stringify(response.data.token)
                         )
+                        setIsLoading(false)
                         return navigate("/home")
                     }
-                    // informations sent are not good
-                    else {
-                        console.log("erreur status est : " + response.status)
-                        alert(" erreur email ou mot de passe incorrect !")
-                        emailInput.value = ""
-                        passwordInput.value = ""
-                    }
                 })
-                .catch((error) => console.log(error))
+                .catch((error) => {
+                    // it's not good, we inform user why
+                    setInvalidateInputs(true)
+                    setErrorMessage(error.response.data.message)
+                    emailInput.value = ""
+                    passwordInput.value = ""
+                    setIsLoading(false)
+                    console.log(
+                        "la response n'est pas ok au loguser, pris par le catch : " +
+                            error.response.data.message
+                    )
+                })
         } else {
             alert("Format email ou mot de passe incorrect !")
             setInvalidateInputs(true)
         }
     }
 
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <Container>
             <LogoStyle src={logo} alt="logo" />
             <h1>Connectez vous !</h1>
-            <FormStyle
-                onSubmit={handleSubmit}
-                disabled={isDisabled ? "disabled" : ""}
-            >
+            <FormStyle onSubmit={handleSubmit}>
                 <FormInputContainerStyle>
                     <label htmlFor="email">Email</label>
                     <FormInputStyle
@@ -89,7 +96,11 @@ export function LogIn() {
                         onChange={(e) => setPassword(e.target.value)}
                     ></FormInputStyle>
                 </FormInputContainerStyle>
-                {invalidateInputs ? <InvalidateLoginAction /> : ""}
+                {invalidateInputs ? (
+                    <InvalidateLoginAction text={errorMessage} />
+                ) : (
+                    ""
+                )}
                 <LogFormButton text={"Log In"} />
             </FormStyle>
             <p>
@@ -148,9 +159,3 @@ const FormInputStyle = styled.input`
     height: 30px;
     padding: 2px;
 `
-
-// // L'idée : centrer le composant au centre
-//  - avec un champ email
-//  - avec un champ mdp
-//  - un changer de page en lien dessous
-//   -un btn se connecter

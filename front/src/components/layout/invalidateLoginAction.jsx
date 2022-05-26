@@ -1,13 +1,8 @@
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 
-export default function InvalidateLoginAction() {
-    return (
-        <SmallInputAlert>
-            Saisie de l'email ou du mot de passe incorrecte. Veuillez revoir
-            votre saisie.
-        </SmallInputAlert>
-    )
+export default function InvalidateLoginAction({ text }) {
+    return <SmallInputAlert>{text}</SmallInputAlert>
 }
 
 /* STYLE AND CSS */

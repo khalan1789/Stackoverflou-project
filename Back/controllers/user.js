@@ -71,7 +71,7 @@ exports.login = (req, res) => {
             if (!user) {
                 return res.status(401).json({
                     // status: 401,
-                    error: "User not found !",
+                    message: "Utilisateur non trouvé !",
                 })
             }
             bcrypt
@@ -80,10 +80,10 @@ exports.login = (req, res) => {
                     if (!valid) {
                         return res.status(401).json({
                             // status: 401,
-                            message: "Invalid password !",
+                            message: "Le mot de passe saisie est incorrect !",
                         })
                     }
-                    res.status(202).json({
+                    res.status(200).json({
                         // à remettre en status 200 quand tout sera ok niveau front
                         token: jwt.sign({ userId: user._id }, secretToken, {
                             expiresIn: "24h",
@@ -166,54 +166,11 @@ exports.updateOneUser = (req, res) => {
         .catch((error) => console.log("error update user : " + error))
 }
 
-// exports.signup = (req, res) => {
-//     try {
-//         if (
-//             !req.body.email ||
-//             !req.body.password ||
-//             !req.body.firstname ||
-//             !req.body.lastname ||
-//             !req.body.nickname
-//         ) {
-//             return res
-//                 .status(400)
-//                 .json({ error: " invalid fields or not complete !!!" })
-//         } else {
-//             try {
-//                 /** regexp inputs à faire ici pour contrôler les champs **/
-
-//                 // check if user already exist
-//                 let existingUser = User.findOne({ email: req.body.email })
-//                 console.log("email", req.body.email)
-//                 if (existingUser) {
-//                     // what the fuck !! here
-//                     res.status(401).json({
-//                         message: "Error ! user already exist !",
-//                     })
-//                 } else {
-//                     bcrypt.hash(req.body.password, 10).then((hash) => {
-//                         const user = new User({
-//                             email: req.body.email,
-//                             password: hash,
-//                             firstname: req.body.firstname,
-//                             lastname: req.body.lastname,
-//                             nickname: req.body.nickname,
-//                             creationDate: new Date(),
-//                         })
-//                         // use save method from mongoose
-//                         user.save()
-//                             .then(() =>
-//                                 res.status(201).json({
-//                                     message: "Utilisateur créé avec succès !",
-//                                 })
-//                             )
-//                             .catch((error) => res.status(500).json({ error }))
-//                     })
-//                 }
-//             } catch (error) {
-//                 res.status(500).json({ error, message: "an error occured" })
-//             }
-//         }
-//     } catch (error) {
-//         res.status(500).json({ error })
-//     }
+exports.deleteOneUser = (req, res) => {
+    const id = req.body._id
+    User.findOneAndDelete({ _id: id })
+        .then(() => res.status(200).json({ message: "success user delete" }))
+        .catch((error) => {
+            throw error
+        })
+}

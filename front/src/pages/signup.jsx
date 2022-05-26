@@ -7,6 +7,7 @@ import { createUser } from "../api/userApi"
 import { LogFormButton } from "../components/buttons/logFormButton"
 import { validateCreateUserFields } from "../utils/helper/regexp"
 import InvalidateSignupAction from "../components/layout/invalidateSignupAction"
+import Loading from "../components/loading"
 
 export function SignUp() {
     const [email, setEmail] = useState("")
@@ -18,6 +19,9 @@ export function SignUp() {
 
     //check form validation
     const [invalidateInputs, setInvalidateInputs] = useState(false)
+
+    // prepare state for loader
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = (e) => {
         e.preventDefault()
@@ -40,6 +44,7 @@ export function SignUp() {
                 password
             )
         ) {
+            setIsLoading(true)
             try {
                 // call api with data
                 createUser(data)
@@ -57,18 +62,23 @@ export function SignUp() {
                             )
                             navigate("/login")
                         }
+                        setIsLoading(false)
                     })
                     .catch((error) => console.log(error))
             } catch (error) {
                 console.log("erreur en force", error.request.status)
+                setIsLoading(false)
             }
         } else {
+            setIsLoading(false)
             setInvalidateInputs(true)
             alert("Saisie incorrecte !")
         }
     }
 
-    return (
+    return isLoading ? (
+        <Loading />
+    ) : (
         <Container>
             <LogoStyle src={logo} alt="logo" />
             <h1>Rejoignez-nous !</h1>
@@ -105,6 +115,7 @@ export function SignUp() {
                 <FormInputContainerStyle>
                     <label htmlFor="password">Mot de passe</label>
                     <FormInputStyle
+                        placeholder="Au moins 8 charactères"
                         id="password"
                         type="password"
                         onChange={(e) => setPassword(e.target.value)}

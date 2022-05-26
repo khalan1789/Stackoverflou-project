@@ -6,17 +6,16 @@ const instance = axios.create({
     baseURL: "http://localhost:9000/api/",
 })
 
-// try whith dispatch here
 export function logUser(data) {
     // add login route to the url
     const loginUrl = "login"
-
-    return instance
-        .post(loginUrl, data)
-        .then((response) => {
+    try {
+        return instance.post(loginUrl, data).then((response) => {
             return response
         })
-        .catch((error) => console.log(error))
+    } catch (error) {
+        console.log(error)
+    }
 }
 
 export function createUser(data) {
@@ -27,7 +26,7 @@ export function createUser(data) {
         .post(signupUrl, data)
         .then((response) => {
             // if request is ok
-            console.log("response status :", response.status)
+            console.log("response status : ", response.status)
 
             status = response.status
             return status
@@ -83,14 +82,3 @@ export function deleteUser(id) {
         })
         .catch((error) => console.log(error))
 }
-
-// export async function deleteUser(id) {
-//     const url = `/user/${id}`
-//     const token = JSON.parse(localStorage.getItem("stack-overflou-token"))
-
-//     const deleteResponse = await instance.delete(url, {
-//         headers: { authorization: token },
-//     })
-//     console.log("del res > ", deleteResponse)
-//     return deleteResponse
-// }
