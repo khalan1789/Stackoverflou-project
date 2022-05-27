@@ -85,9 +85,17 @@ exports.getAllTopicMessage = async (req, res) => {
         const messages = await Promise.all(
             MessagesNotEdited.map(async (message) => {
                 const user = await User.findById({ _id: message.user_id })
-                message = {
-                    ...message.toObject(),
-                    nickname: user.nickname,
+                // if an author is deleted
+                if (!user) {
+                    message = {
+                        ...message.toObject(),
+                        nickname: "ancien utilisateur",
+                    }
+                } else {
+                    message = {
+                        ...message.toObject(),
+                        nickname: user.nickname,
+                    }
                 }
                 return message
             })

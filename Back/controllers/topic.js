@@ -40,10 +40,23 @@ exports.getOneTopic = async (req, res) => {
         const topicNotEdited = await Topic.findOne({ _id: req.params.id })
         // we get topic author
         const user = await User.findById({ _id: topicNotEdited.user_id })
-        // we create another topic including nickname for the front
-        const topic = { ...topicNotEdited.toObject(), nickname: user.nickname }
-        console.log("topic", topic)
-        res.status(200).json({ topic })
+        if (!user) {
+            // we create another topic with a generic nickname for the front
+            const topic = {
+                ...topicNotEdited.toObject(),
+                nickname: "ancien utilisateur",
+            }
+            console.log("topic", topic)
+            res.status(200).json({ topic })
+        } else {
+            // we create another topic including nickname for the front
+            const topic = {
+                ...topicNotEdited.toObject(),
+                nickname: user.nickname,
+            }
+            console.log("topic", topic)
+            res.status(200).json({ topic })
+        }
     } catch (error) {
         res.status(400).json({ error })
     }
@@ -72,7 +85,16 @@ exports.getAllTopics = async (req, res) => {
                 // for every topic we find the author
                 const user = await User.findById({ _id: topic.user_id })
                 // then we add the author in the topic
-                topic = { ...topic.toObject(), nickname: user.nickname }
+                // if user has deleted his account
+                if (!user) {
+                    topic = {
+                        ...topic.toObject(),
+                        nickname: "ancien utilisateur",
+                    }
+                } else {
+                    // we send with author nickname
+                    topic = { ...topic.toObject(), nickname: user.nickname }
+                }
                 console.log("topic", topic)
                 return topic
             })
