@@ -8,7 +8,7 @@ import { ToUpdateCommentButton } from "./buttons/toUpdateCommentButton"
 
 export function Comment({ content, date, nickname, id, user_id }) {
     const editedDate = editDate(date)
-    const userId = useSelector((state) => state.user.infos.userId)
+    const user = useSelector((state) => state.user.infos)
 
     //function delete comment
     function deleteThisComment(id) {
@@ -30,7 +30,7 @@ export function Comment({ content, date, nickname, id, user_id }) {
             <ParagraphStyle>
                 {nickname} le {editedDate}
             </ParagraphStyle>
-            {userId === user_id && (
+            {user.userId === user_id && (
                 <>
                     <ToUpdateCommentButton
                         text={"modifier"}
@@ -42,6 +42,15 @@ export function Comment({ content, date, nickname, id, user_id }) {
                     />
                 </>
             )}
+            {
+                // delete control admin section
+                user !== null && user.isAdmin && (
+                    <DeleteCommentButton
+                        text={"supprimer le commentaire"}
+                        action={() => deleteThisComment(id)}
+                    />
+                )
+            }
         </CommentContainer>
     )
 }

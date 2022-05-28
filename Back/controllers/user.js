@@ -51,6 +51,7 @@ exports.signup = async (req, res) => {
                     lastname: req.body.lastname,
                     nickname: req.body.nickname,
                     creationDate: new Date(),
+                    isAdmin: false,
                 })
                 // use save method from mongoose
                 user.save()
@@ -112,6 +113,7 @@ exports.checkToken = (req, res) => {
                         nickname: user.nickname,
                         email: user.email,
                         creationDate: user.creationDate,
+                        isAdmin: user.isAdmin,
                     },
                 },
             })

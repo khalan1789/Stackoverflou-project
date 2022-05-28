@@ -33,6 +33,7 @@ export function SignUp() {
             firstname,
             lastname,
             nickname,
+            isAdmin: false,
         }
         console.log(data) /* /////CONSOLE LOG\\\\\\\ */
         if (

@@ -1,12 +1,14 @@
-const express = require("express");
-const mongoose = require("mongoose");
-const userRoutes = require("./routes/user");
-const topicRoutes = require("./routes/topic");
-const messageRoutes = require("./routes/message");
+const express = require("express")
+const mongoose = require("mongoose")
+const userRoutes = require("./routes/user")
+const topicRoutes = require("./routes/topic")
+const messageRoutes = require("./routes/message")
+
+const helmet = require("helmet")
 
 // using .env
-const dotenv = require("dotenv").config();
-const url = process.env.URL_Path;
+const dotenv = require("dotenv").config()
+const url = process.env.URL_Path
 
 // connexion to MongoDB database
 mongoose
@@ -15,35 +17,34 @@ mongoose
         useUnifiedTopology: true,
     })
     .then(() => console.log("connexion à la BDD MongoDB réussie !"))
-    .catch(() => console.log("connexion à MongoDB échouée ... "));
+    .catch(() => console.log("connexion à MongoDB échouée ... "))
 
 // initializing express
-const app = express();
+const app = express()
 
-// app.use((req, res) => {
-//     res.json({ message: "ok express init !" });
-// });
+// helmet
+app.use(helmet())
 
 // CORS configuration
 app.use((req, res, next) => {
-    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Origin", "*")
     res.setHeader(
         "Access-Control-Allow-Headers",
         "Origin, X-Requested-With, Content, Accept, Content-Type, Authorization"
-    );
+    )
     res.setHeader(
         "Access-Control-Allow-Methods",
         "GET, POST, PUT, DELETE, PATCH, OPTIONS"
-    );
-    next();
-});
+    )
+    next()
+})
 
 // parsing request to json
-app.use(express.json());
+app.use(express.json())
 
 // Routes
-app.use("/api", userRoutes);
-app.use("/api/topic", topicRoutes);
-app.use("/api/message", messageRoutes);
+app.use("/api", userRoutes)
+app.use("/api/topic", topicRoutes)
+app.use("/api/message", messageRoutes) // à voir pour remplacment par /api/topic/:id/message
 
-module.exports = app;
+module.exports = app

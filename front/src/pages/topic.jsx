@@ -112,7 +112,15 @@ export function Topic() {
                     </>
                 )}
 
-                {/* à voir si on met la gestion de pj */}
+                {
+                    /* delete control by admin */
+                    user !== null && user.isAdmin && (
+                        <DeleteTopicButton
+                            action={() => removeTopic(topicId)}
+                            text={"Supprimer l'article"}
+                        ></DeleteTopicButton>
+                    )
+                }
             </TopicContainer>
             <CommentsContainer>
                 <h4>Commentaires</h4>
