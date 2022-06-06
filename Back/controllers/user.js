@@ -4,8 +4,12 @@ const bcrypt = require("bcrypt")
 
 const jwt = require("jsonwebtoken")
 
+const crypto = require("crypto")
+const sendEmail = require("../utils/sendEmail")
 require("dotenv").config()
+const clientURL = process.env.client_url
 const secretToken = process.env.secretToken
+const template = require("../utils/templateEmail.handlebars")
 
 // Regexp
 const regexpEmail = /^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,8}$/
@@ -175,4 +179,77 @@ exports.deleteOneUser = (req, res) => {
         .catch((error) => {
             throw error
         })
+}
+
+// reset password
+// exports.forgotPassword = (req, res) => {
+//     const email = req.body.email
+
+//     User.findOne({ email })
+//         .then((user) => {
+//             // user not found
+//             if (!user) {
+//                 return res.status(400).json({ message: "email non trouvé !" })
+//             }
+//             // update user with the new password
+//             // we send a token for reset
+//             let resetToken = crypto.randomBytes(32).toString("hex")
+//             // we prepare the link user will received with the token and id
+//             const link = `${clientURL}/forgot-password?token=${resetToken}&id=${user._id}`
+//             // const hash = bcrypt.hash(resetToken, 10)
+//             // const newResetToken = new Token({
+//             //     token: hash,
+//             //     createdAt: Date.now(),
+//             // })
+//             console.log("link : " + link)
+//             console.log("user email : " + user.email)
+//             sendEmail(
+//                 user.email,
+//                 "Réiniatilastion du mot de passe",
+//                 { name: user.nickname, link: link },
+//                 template
+//             )
+//                 .then(() => {
+//                     console.log("ok réussi")
+//                     res.status(202).json({ message: "demande envoyée " })
+//                     return link
+//                 })
+//                 .catch((error) => console.log(error))
+//         })
+//         .catch((error) => console.log(error))
+// }
+
+exports.forgotPassword = async (req, res) => {
+    try {
+        const email = await req.body.email
+
+        const user = await User.findOne({ email })
+
+        if (!user) {
+            return res.status(400).json({ message: "email non trouvé !" })
+        }
+
+        // update user with the new password
+        // we send a token for reset
+        let resetToken = crypto.randomBytes(32).toString("hex")
+        // we prepare the link user will received with the token and id
+        const link = `${clientURL}/updatepassword?token=${resetToken}&id=${user._id}`
+
+        console.log("link : " + link)
+        console.log("user email : " + user.email)
+
+        // send email with infos
+        sendEmail(
+            user.email,
+            "Réiniatilastion du mot de passe",
+            { name: user.nickname, link: link },
+            "./../utils/templateEmail.handlebars"
+        )
+
+        return res
+            .status(200)
+            .json({ message: " demmande de réinitialisation effectuée" })
+    } catch (error) {
+        return error
+    }
 }

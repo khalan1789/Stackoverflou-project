@@ -82,3 +82,24 @@ export function deleteUser(id) {
         })
         .catch((error) => console.log(error))
 }
+
+// forgot password
+export function forgotPassword(data) {
+    const url = "/forgot-password"
+
+    return instance.post(url, data).then((response) => {
+        return response
+    })
+}
+
+// update password
+// export function updatePassword(data) {
+//     const url = "/user/updatepassword"
+
+//     return instance
+//         .post(url, data)
+//         .then((response) => {
+//             return response
+//         })
+//         .catch((error) => console.log(error))
+// }

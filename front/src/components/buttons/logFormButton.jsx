@@ -12,4 +12,7 @@ const FormButtonStyle = styled.button`
     color: white;
     border-radius: 5px;
     height: 30px;
+    &: hover {
+        cursor: pointer;
+    }
 `

@@ -23,4 +23,7 @@ router.put("/user/:id", authWithToken, userCtrl.updateOneUser)
 // delete user
 router.delete("/user/:id", authWithToken, userCtrl.deleteOneUser)
 
+// reset password
+router.post("/forgot-password", userCtrl.forgotPassword)
+
 module.exports = router

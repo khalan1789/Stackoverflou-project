@@ -43,3 +43,12 @@ export function validateCreateUserFields(
         return true
     }
 }
+
+// to update password
+export function validateUpdatePasswordFields(password) {
+    if (regexPassword.test(password) !== true) {
+        return false
+    } else {
+        return true
+    }
+}

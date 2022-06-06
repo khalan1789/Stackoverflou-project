@@ -1,13 +1,8 @@
 import styled from "styled-components"
 import colors from "../../utils/style/colors"
 
-export default function InvalidateSignupAction() {
-    return (
-        <SmallInputAlert>
-            Les champs ne sont pas correctement saisis, veuillez revoir votre
-            saisie.
-        </SmallInputAlert>
-    )
+export default function InvalidateSignupAction({ text }) {
+    return <SmallInputAlert>{text} </SmallInputAlert>
 }
 
 /* STYLE AND CSS */

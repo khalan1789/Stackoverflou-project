@@ -14,6 +14,8 @@ import { Error404 } from "./pages/error"
 import { UpdateProfile } from "./pages/updateProfile"
 import { UpdateTopic } from "./pages/updateTopic"
 import { UpdateComment } from "./pages/updateComment"
+import { ForgotPassword } from "./pages/forgotPassword"
+import { UpdatePassword } from "./pages/upadtePassword"
 
 function App() {
     return (
@@ -90,6 +92,22 @@ function App() {
                         element={
                             <RequireAuth withAuth={true}>
                                 <UpdateComment />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/forgot-password"
+                        element={
+                            <RequireAuth withAuth={false}>
+                                <ForgotPassword />
+                            </RequireAuth>
+                        }
+                    />
+                    <Route
+                        path="/updatepassword"
+                        element={
+                            <RequireAuth withAuth={false}>
+                                <UpdatePassword />
                             </RequireAuth>
                         }
                     />

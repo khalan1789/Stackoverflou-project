@@ -95,6 +95,9 @@ export function LogIn() {
                         placeholder="entrez votre mot de passe ici"
                         onChange={(e) => setPassword(e.target.value)}
                     ></FormInputStyle>
+                    <ForgotLink to={"/forgot-password"}>
+                        Mot de passe oublié ?
+                    </ForgotLink>
                 </FormInputContainerStyle>
                 {invalidateInputs ? (
                     <InvalidateLoginAction text={errorMessage} />
@@ -158,4 +161,13 @@ const FormInputStyle = styled.input`
     margin-top: 7px;
     height: 30px;
     padding: 2px;
+`
+const ForgotLink = styled(Link)`
+    font-style: italic;
+    font-size: 0.8rem;
+    margin-top: 20px;
+    width: 50%;
+    &:hover {
+        font-weight: bold;
+    }
 `
