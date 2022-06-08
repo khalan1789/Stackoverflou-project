@@ -60,10 +60,6 @@ export function LogIn() {
                     emailInput.value = ""
                     passwordInput.value = ""
                     setIsLoading(false)
-                    console.log(
-                        "la response n'est pas ok au loguser, pris par le catch : " +
-                            error.response.data.message
-                    )
                 })
         } else {
             alert("Format email ou mot de passe incorrect !")

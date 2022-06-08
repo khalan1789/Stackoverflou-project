@@ -12,7 +12,7 @@ export function ForgotPassword() {
     function resetRequest(e) {
         e.preventDefault()
         if (regexpEmail.test(email)) {
-            alert("ok on envoi")
+            alert("demande envoyée à l'adresse indiquée")
             const data = {
                 email,
             }
@@ -34,10 +34,10 @@ export function ForgotPassword() {
                 pour la réinitialisation
             </ParagraphStyle>
             <FormContainer action="submit">
-                <label htmlFor="email">
+                <label htmlFor="Email">
                     <Input
+                        id="Email"
                         type="email"
-                        id="email"
                         required
                         onChange={(e) => setEmail(e.target.value)}
                     ></Input>

@@ -1,15 +1,19 @@
 const User = require("../models/user")
-
+const Token = require("../models/token")
 const bcrypt = require("bcrypt")
-
 const jwt = require("jsonwebtoken")
-
 const crypto = require("crypto")
 const sendEmail = require("../utils/sendEmail")
 require("dotenv").config()
 const clientURL = process.env.client_url
-const secretToken = process.env.secretToken
+
+// tokens
+const secretToken = process.env.SECRET_TOKEN
+const resetToken = process.env.RESET_TOKEN
+
+// template
 const template = require("../utils/templateEmail.handlebars")
+const user = require("../models/user")
 
 // Regexp
 const regexpEmail = /^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,8}$/
@@ -181,44 +185,6 @@ exports.deleteOneUser = (req, res) => {
         })
 }
 
-// reset password
-// exports.forgotPassword = (req, res) => {
-//     const email = req.body.email
-
-//     User.findOne({ email })
-//         .then((user) => {
-//             // user not found
-//             if (!user) {
-//                 return res.status(400).json({ message: "email non trouvé !" })
-//             }
-//             // update user with the new password
-//             // we send a token for reset
-//             let resetToken = crypto.randomBytes(32).toString("hex")
-//             // we prepare the link user will received with the token and id
-//             const link = `${clientURL}/forgot-password?token=${resetToken}&id=${user._id}`
-//             // const hash = bcrypt.hash(resetToken, 10)
-//             // const newResetToken = new Token({
-//             //     token: hash,
-//             //     createdAt: Date.now(),
-//             // })
-//             console.log("link : " + link)
-//             console.log("user email : " + user.email)
-//             sendEmail(
-//                 user.email,
-//                 "Réiniatilastion du mot de passe",
-//                 { name: user.nickname, link: link },
-//                 template
-//             )
-//                 .then(() => {
-//                     console.log("ok réussi")
-//                     res.status(202).json({ message: "demande envoyée " })
-//                     return link
-//                 })
-//                 .catch((error) => console.log(error))
-//         })
-//         .catch((error) => console.log(error))
-// }
-
 exports.forgotPassword = async (req, res) => {
     try {
         const email = await req.body.email
@@ -228,20 +194,32 @@ exports.forgotPassword = async (req, res) => {
         if (!user) {
             return res.status(400).json({ message: "email non trouvé !" })
         }
-
         // update user with the new password
-        // we send a token for reset
+        // check if there is already a token for the user and deleteIt
+        let token = await Token.findOne({ userId: user._id })
+        if (token) {
+            await token.deleteOne()
+        }
+
+        // we send a token for reset with a random token
         let resetToken = crypto.randomBytes(32).toString("hex")
+
+        // we create a new Token based on model that we'll send to storage
+        const hash = await bcrypt.hash(resetToken, 10)
+
+        await new Token({
+            userId: user._id,
+            token: hash,
+            createdAt: Date.now(),
+        }).save()
+
         // we prepare the link user will received with the token and id
         const link = `${clientURL}/updatepassword?token=${resetToken}&id=${user._id}`
 
-        console.log("link : " + link)
-        console.log("user email : " + user.email)
-
         // send email with infos
-        sendEmail(
+        await sendEmail(
             user.email,
-            "Réiniatilastion du mot de passe",
+            "Réinitialisation du mot de passe",
             { name: user.nickname, link: link },
             "./../utils/templateEmail.handlebars"
         )
@@ -251,5 +229,44 @@ exports.forgotPassword = async (req, res) => {
             .json({ message: " demmande de réinitialisation effectuée" })
     } catch (error) {
         return error
+    }
+}
+
+exports.updatePassword = async (req, res) => {
+    try {
+        const token = req.body.token
+        const userId = req.body.userId
+        const newPassword = req.body.password
+
+        // check if all data needed are in the request
+        if (!token || !userId || !newPassword) {
+            return res
+                .status(400)
+                .json({ message: "non authorisé, un élément est manquant" })
+        }
+        // now we check if there is well a token for this user
+        let resetPasswordToken = await Token.findOne({ userId })
+        if (!resetPasswordToken) {
+            return res.status(400).json({ message: "Token invalide ou expiré" })
+        }
+        // there is a token, now we will check if it's good
+        const isValid = await bcrypt.compare(token, resetPasswordToken.token)
+        if (!isValid) {
+            return res.status(400).json({ message: "Token invalide ou expiré" })
+        }
+
+        const hash = await bcrypt.hash(newPassword, 10)
+
+        await user.updateOne(
+            { _id: userId },
+            {
+                password: hash,
+            },
+            { new: true }
+        )
+        await resetPasswordToken.deleteOne()
+        return res.status(201).json({ message: "user updated" })
+    } catch (error) {
+        return res.status(500).json({ problème: error })
     }
 }

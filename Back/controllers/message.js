@@ -2,13 +2,6 @@ const message = require("../models/message")
 const Message = require("../models/message")
 const User = require("../models/user")
 
-// get all
-// first with all messages
-// exports.getAllMessage = (req, res, next) => {
-//     Message.find()
-//         .then((messages) => res.status(200).json({ messages }))
-//         .catch((error) => res.status(400).json({ error }));
-// };
 // try to get user nickname with all messages
 exports.getAllMessage = async (req, res, next) => {
     try {
@@ -105,18 +98,4 @@ exports.getAllTopicMessage = async (req, res) => {
     } catch (error) {
         console.log(error)
     }
-
-    // // search nickname author
-    // const comments = await Message.find({ topic_id: topic_id });
-    // const topicAuthor = comments.map((user_id) => {
-    //     User.findById(user_id)
-    //     .then(
-    //         if(!User){
-    //             return nickname = "ancien utilisatuer"
-    //         }else{
-    //             return nickname
-    //         }
-    //     )
-    //     .catch(err => )
-    // })
 }

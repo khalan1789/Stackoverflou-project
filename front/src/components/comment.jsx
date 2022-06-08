@@ -22,7 +22,7 @@ export function Comment({ content, date, nickname, id, user_id }) {
                     console.log("type of status returned : " + res.status)
                 }
             })
-            .catch((error) => console.log("erreur del com : " + error))
+            .catch((error) => console.log("comment error : " + error))
     }
     return (
         <CommentContainer key={id}>

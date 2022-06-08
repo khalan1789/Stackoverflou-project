@@ -35,7 +35,6 @@ export function SignUp() {
             nickname,
             isAdmin: false,
         }
-        console.log(data) /* /////CONSOLE LOG\\\\\\\ */
         if (
             validateCreateUserFields(
                 firstname,
@@ -67,7 +66,7 @@ export function SignUp() {
                     })
                     .catch((error) => console.log(error))
             } catch (error) {
-                console.log("erreur en force", error.request.status)
+                console.log("error status", error.request.status)
                 setIsLoading(false)
             }
         } else {

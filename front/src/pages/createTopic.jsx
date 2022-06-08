@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useState, useEffect } from "react"
 import { useSelector } from "react-redux"
 import { Link, useNavigate } from "react-router-dom"
 import styled from "styled-components"
@@ -10,11 +10,18 @@ import colors from "../utils/style/colors"
 
 export function CreateTopic() {
     const navigate = useNavigate()
+    const user = useSelector((state) => state.user.infos)
 
+    useEffect(() => {
+        if (user !== null) {
+            setUserId(user.userId)
+        }
+    }, [user])
     // data to send
     const [title, setTitle] = useState("")
     const [description, setDescription] = useState("")
-    const userId = useSelector((state) => state.user.infos.userId)
+    const [userId, setUserId] = useState("")
+    // const userId = useSelector((state) => state.user.infos.userId)
 
     //to alert user if an error occured
     const [publishFailed, setPublishFailed] = useState(false)
@@ -34,11 +41,6 @@ export function CreateTopic() {
             title,
             description,
         }
-
-        console.log("id : " + data.userId)
-        console.log("title : " + data.title)
-        console.log("description : " + data.description)
-
         createTopic(data)
             .then((res) =>
                 res.status === 201
@@ -50,7 +52,6 @@ export function CreateTopic() {
 
         eraseInputs()
     }
-
     return (
         <FormContainerStyle>
             <HeaderStyle>

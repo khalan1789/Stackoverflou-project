@@ -4,6 +4,8 @@ import colors from "../utils/style/colors"
 import logo from "../assets/livre_ouvert_violet.svg"
 import { LogFormButton } from "../components/buttons/logFormButton"
 import { validateUpdatePasswordFields } from "../utils/helper/regexp"
+import { updatePassword } from "../api/userApi"
+import { useNavigate } from "react-router-dom"
 
 export function UpdatePassword() {
     const [passwordFirst, setPasswordFirst] = useState("")
@@ -11,6 +13,7 @@ export function UpdatePassword() {
     const UrlParams = new URLSearchParams(window.location.search)
     const userId = UrlParams.get("id")
     const resetToken = UrlParams.get("token")
+    const navigate = useNavigate()
 
     // comparing function
     function comparePassword(entry1, entry2) {
@@ -23,20 +26,39 @@ export function UpdatePassword() {
     // update form function
     function handleSubmit(e) {
         e.preventDefault()
+        if (passwordFirst.length < 8 || passwordTwice.length < 8) {
+            alert("attention il faut au moins 8 charactères !")
+        }
         const data = {
-            userId,
             token: resetToken,
+            userId,
             password: passwordTwice,
         }
+        // check if fields are okay to send data after
         if (validateUpdatePasswordFields(passwordFirst, passwordTwice)) {
-            comparePassword(passwordFirst, passwordTwice)
-                ? alert("ok les mêmes !!")
-                : // ici reste à récup l'id et le token, et d'envoyer les datas
-                  alert("pas pareil!!!")
+            const fieldsOkToSend = comparePassword(passwordFirst, passwordTwice)
+            if (fieldsOkToSend) {
+                updatePassword(data)
+                    .then((response) => {
+                        if (response.status === 201) {
+                            alert(
+                                "la demande de changement a bien été effectuée, veuillez vous connectez à présent"
+                            )
+                            navigate("/login")
+                        }
+                    })
+                    .catch((error) => {
+                        console.log(error)
+                        alert(
+                            "La demande a échouée ou a expirée. Veuillez renouvellez la procédure de votre demande de nouveau via la page login."
+                        )
+                    })
+            } else {
+                alert(
+                    "attention les mots de passes ne correspondent pas ! Revoyez votre saisie."
+                )
+            }
         }
-
-        console.log("ui", userId)
-        console.log("token", resetToken)
     }
 
     return (
@@ -72,14 +94,6 @@ export function UpdatePassword() {
                     ></FormInputStyle>
                 </FormInputContainerStyle>
 
-                {/* {invalidateInputs && (
-                    <InvalidateSignupAction
-                        text={
-                            "Les champs ne sont pas correctement saisis, veuillez revoir votre saisie."
-                        }
-                    />
-                )} */}
-                {/* <LogFormButton text={"Valider l'inscription"} /> */}
                 <LogFormButton text={"Valider"} />
             </FormStyle>
         </Container>

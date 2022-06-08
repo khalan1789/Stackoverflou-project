@@ -93,13 +93,15 @@ export function forgotPassword(data) {
 }
 
 // update password
-// export function updatePassword(data) {
-//     const url = "/user/updatepassword"
+export function updatePassword(data) {
+    const url = "/updatepassword"
 
-//     return instance
-//         .post(url, data)
-//         .then((response) => {
-//             return response
-//         })
-//         .catch((error) => console.log(error))
-// }
+    return instance
+        .put(url, data)
+        .then((response) => {
+            return response
+        })
+        .catch((error) => {
+            console.log(error)
+        })
+}

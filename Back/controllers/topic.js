@@ -17,23 +17,6 @@ exports.createOneTopic = (req, res) => {
 }
 
 // get one
-// exports.getOneTopic = (req, res) => {
-//     Topic.findOne({ _id: req.params.id })
-//         .then((topic) => {
-//             User.findById({ _id: topic.user_id })
-//                 .then((user) => {
-//                     topic = { ...topic.toObject(), nickname: user.nickname }
-
-//                     console.log("topic boucle", topic)
-//                     return topic
-//                 })
-//                 .catch((error) => console.log(error))
-
-//             res.status(200).json({ topic })
-//         })
-//         .catch((error) => res.status(400).json({ error }))
-// }
-// version async await get one
 exports.getOneTopic = async (req, res) => {
     try {
         // first we get the topic witch dont have any nickname
@@ -46,7 +29,6 @@ exports.getOneTopic = async (req, res) => {
                 ...topicNotEdited.toObject(),
                 nickname: "ancien utilisateur",
             }
-            console.log("topic", topic)
             res.status(200).json({ topic })
         } else {
             // we create another topic including nickname for the front
@@ -54,7 +36,6 @@ exports.getOneTopic = async (req, res) => {
                 ...topicNotEdited.toObject(),
                 nickname: user.nickname,
             }
-            console.log("topic", topic)
             res.status(200).json({ topic })
         }
     } catch (error) {
@@ -64,16 +45,6 @@ exports.getOneTopic = async (req, res) => {
 
 // get all
 
-// version 1 just Topics
-// exports.getAllTopics = (req, res) => {
-//     Topic.find()
-//         .then((topics) => {
-//             res.status(200).json({ topics });
-//         })
-//         .catch((error) => res.status(400).json({ error }));
-// res.status(200).json({ topics });
-
-// version 2 trying to have nickname in the same time
 exports.getAllTopics = async (req, res) => {
     try {
         // we get all the topic where at first there is not the user nickname
@@ -95,7 +66,6 @@ exports.getAllTopics = async (req, res) => {
                     // we send with author nickname
                     topic = { ...topic.toObject(), nickname: user.nickname }
                 }
-                console.log("topic", topic)
                 return topic
             })
         )

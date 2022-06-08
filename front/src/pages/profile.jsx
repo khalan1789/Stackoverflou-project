@@ -1,7 +1,6 @@
 import styled from "styled-components"
 import colors from "../utils/style/colors"
 import logo from "../assets/livre_ouvert_violet.svg"
-import { Link } from "react-router-dom"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { useState } from "react"
@@ -130,35 +129,6 @@ const TextInfosContainerStyle = styled.div`
     align-items: center;
 `
 
-// const ModificationButtonStyle = styled(Link)`
-//     text-decoration: none;
-//     margin-bottom: 15px;
-//     margin-top: 10px;
-//     border: 1px solid ${colors.primary};
-//     background-color: white;
-//     color: ${colors.primary};
-//     cursor: pointer;
-// `
-
 const H3InfosUserStyled = styled.h3`
     color: ${colors.primary};
 `
-
-/* zone pour passage en mode mobile first
-
-// info
-const InfoWrapper = styled.div`
-    display: flex;
-    width: 100%;
-
-
-const AvatarContainerStyle = styled.div`
-    width: 50%;
-    display: flex;
-    align-items: center;
-    justify-content: space-evenly;
-    flex-direction: column;
-    background-color: yellow;
-
-
-*/
