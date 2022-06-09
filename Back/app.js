@@ -4,7 +4,9 @@ const userRoutes = require("./routes/user")
 const topicRoutes = require("./routes/topic")
 const messageRoutes = require("./routes/message")
 
+// app security package
 const helmet = require("helmet")
+const cookieSession = require("cookie-session")
 
 // using .env
 const dotenv = require("dotenv").config()
@@ -24,6 +26,17 @@ const app = express()
 
 // helmet
 app.use(helmet())
+
+// cookie-session
+app.use(
+    cookieSession({
+        secret: "sessionS3cur3",
+        cookie: {
+            secure: true,
+            httpOnly: true,
+        },
+    })
+)
 
 // CORS configuration
 app.use((req, res, next) => {
