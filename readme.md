@@ -27,7 +27,7 @@ StackOverFlou is made of a React front-end with Redux tool kit, a NodeJS back-en
 
 <p>This app use ExpressJS, Mongoose and a MongoDB database.</p>
 
-<p>To install dependencies, run the following command in the back-end folder: `npm install`. </p>
+<p>To install dependencies, run the following command in the back-end folder: ``npm install``. </p>
 
 <h2>Usage</h2>
 
@@ -37,7 +37,7 @@ StackOverFlou is made of a React front-end with Redux tool kit, a NodeJS back-en
 
 <h3>Back-end</h3>
 
-<p>From the back-end folder, run `npm start` command or `node serve` to start the server, depending on if you prefer using nodemon or not.</p>
+<p>From the back-end folder, run ``npm start`` command or ``node serve`` to start the server, depending on if you prefer using nodemon or not.</p>
 
 <h2>Technologies Used</h2>
 
