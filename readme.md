@@ -21,7 +21,7 @@ StackOverFlou is made of a React front-end with Redux tool kit, a NodeJS back-en
 
 <h3>Front-end</h3>
 
-<a>Instructions for front-end installation.</a>
+<a href="./front/README.md">Instructions for front-end installation.</a>
 
 <h3>Back-end</h3>
 
@@ -33,7 +33,7 @@ StackOverFlou is made of a React front-end with Redux tool kit, a NodeJS back-en
 
 <h3>Front-end</h3>
 
-<a>Refer to the front-end readme.</a>
+<a href="./front/README.md">Refer to the front-end readme.</a>
 
 <h3>Back-end</h3>
 
