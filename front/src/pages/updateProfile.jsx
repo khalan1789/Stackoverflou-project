@@ -1,5 +1,4 @@
 import styled from "styled-components"
-import colors from "../utils/style/colors"
 import { useSelector } from "react-redux"
 import { useEffect } from "react"
 import { useState } from "react"
