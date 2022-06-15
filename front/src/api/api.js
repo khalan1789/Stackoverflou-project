@@ -3,7 +3,7 @@ import axios from "axios"
 
 // create a base url for all request
 const instance = axios.create({
-    baseURL: "http://localhost:9000/api/",
+    baseURL: "https://api.stackoverflou.ducau-t-developpement.com/",
 })
 
 export function logUser(data) {
