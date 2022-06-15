@@ -3,6 +3,7 @@
 const regexpEmail = /^[a-zA-Z0-9._-]+[@]{1}[a-zA-Z0-9._-]+[.]{1}[a-z]{2,8}$/
 const regexFields = /^[A-Za-z- éè^ïö]+$/
 const regexNickName = /^[A-Za-z- _1-9.éè^ïö]+$/
+const regexPassword = /^[A-Za-z- _1-9.éè^@!/]{8,}$/
 
 // to login
 export function validateLogInFiedls(email, password) {
@@ -37,6 +38,15 @@ export function validateCreateUserFields(
         email === "" ||
         password === ""
     ) {
+        return false
+    } else {
+        return true
+    }
+}
+
+// to update password
+export function validateUpdatePasswordFields(password) {
+    if (regexPassword.test(password) !== true) {
         return false
     } else {
         return true
