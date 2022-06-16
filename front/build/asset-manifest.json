@@ -1,0 +1,16 @@
+{
+  "files": {
+    "main.css": "/static/css/main.e6c13ad2.css",
+    "main.js": "/static/js/main.8dcdb07f.js",
+    "static/media/erreurIngrid.png": "/static/media/erreurIngrid.ad295752ace7178b43b8.png",
+    "static/media/livre_ouvert_jaune.svg": "/static/media/livre_ouvert_jaune.ff0d73975285d0d9e0f3d55a8fe78e41.svg",
+    "static/media/livre_ouvert_violet.svg": "/static/media/livre_ouvert_violet.c9c47833de2794d264f09198b6f69703.svg",
+    "index.html": "/index.html",
+    "main.e6c13ad2.css.map": "/static/css/main.e6c13ad2.css.map",
+    "main.8dcdb07f.js.map": "/static/js/main.8dcdb07f.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.e6c13ad2.css",
+    "static/js/main.8dcdb07f.js"
+  ]
+}
