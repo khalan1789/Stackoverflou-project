@@ -3,6 +3,7 @@ const mongoose = require("mongoose")
 const userRoutes = require("./routes/user")
 const topicRoutes = require("./routes/topic")
 const messageRoutes = require("./routes/message")
+var cors = require('cors')
 
 // app security package
 const helmet = require("helmet")
@@ -23,6 +24,8 @@ mongoose
 
 // initializing express
 const app = express()
+// Use Cors
+app.user(cors())
 
 // helmet
 app.use(helmet())
