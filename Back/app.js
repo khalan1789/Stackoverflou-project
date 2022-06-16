@@ -25,7 +25,7 @@ mongoose
 // initializing express
 const app = express()
 // Use Cors
-app.user(cors())
+app.use(cors())
 
 // helmet
 app.use(helmet())
